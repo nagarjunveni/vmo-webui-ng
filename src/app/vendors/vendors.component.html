@@ -1,0 +1,56 @@
+<div class="vendors-container">
+  <h1>Vendors</h1>
+  
+  <p-card styleClass="mb-4">
+    <div class="card-header">
+      <h2>Vendor Management</h2>
+      <p-button label="Add Vendor" icon="pi pi-plus" styleClass="p-button-success"></p-button>
+    </div>
+    
+    <p-table [value]="vendors" [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rows]="10" 
+             styleClass="p-datatable-gridlines" [showCurrentPageReport]="true" [rowHover]="true"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+             [scrollable]="true" scrollHeight="400px">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Vendor ID</th>
+          <th>Vendor Name</th>
+          <th>Contact Name</th>
+          <th>Contact Number</th>
+          <th>Email</th>
+          <th>Commission (%)</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Rating</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-vendor>
+        <tr>
+          <td>{{vendor.vendorId}}</td>
+          <td>{{vendor.vendorName}}</td>
+          <td>{{vendor.contactName}}</td>
+          <td>{{vendor.contactNumber}}</td>
+          <td>
+            <a href="mailto:{{vendor.email}}" class="email-link">{{vendor.email}}</a>
+          </td>
+          <td class="text-center">{{vendor.commission}}%</td>
+          <td>{{vendor.location}}</td>
+          <td>
+            <p-tag [value]="vendor.status" [severity]="getStatusSeverity(vendor.status)"></p-tag>
+          </td>
+          <td>
+            <p-rating [ngModel]="vendor.rating" [readonly]="true" [cancel]="false"></p-rating>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text"></p-button>
+              <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-text p-button-info"></p-button>
+              <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-text p-button-danger"></p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div> 

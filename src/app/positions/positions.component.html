@@ -1,0 +1,62 @@
+<div class="positions-container">
+  <h1>Positions</h1>
+  
+  <p-card styleClass="mb-4">
+    <div class="card-header">
+      <h2>Position Management</h2>
+      <p-button label="Create Position" icon="pi pi-plus" styleClass="p-button-success"></p-button>
+    </div>
+    
+    <p-table [value]="positions" [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rows]="10" 
+             styleClass="p-datatable-gridlines" [showCurrentPageReport]="true" [rowHover]="true"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+             [scrollable]="true" scrollHeight="400px">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Position ID</th>
+          <th>Position Name</th>
+          <th>SOW</th>
+          <th>Department</th>
+          <th>Location</th>
+          <th>Rate</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+          <th>Assigned Resource</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-position>
+        <tr>
+          <td>{{position.positionId}}</td>
+          <td>{{position.positionName}}</td>
+          <td>
+            <a href="#" class="sow-link">{{position.sow}}</a>
+          </td>
+          <td>{{position.department}}</td>
+          <td>{{position.location}}</td>
+          <td class="text-right">{{formatCurrency(position.rate)}}/hr</td>
+          <td>{{position.startDate | date:'mediumDate'}}</td>
+          <td>{{position.endDate | date:'mediumDate'}}</td>
+          <td>
+            <p-tag [value]="position.status" [severity]="getStatusSeverity(position.status)"></p-tag>
+          </td>
+          <td>
+            <div *ngIf="position.assignedResource" class="resource-name">
+              <p-avatar [label]="position.assignedResource.charAt(0)" styleClass="mr-2" size="small" [style]="{'background-color': 'var(--primary-color)', 'color': 'var(--primary-color-text)'}"></p-avatar>
+              <span>{{position.assignedResource}}</span>
+            </div>
+            <span *ngIf="!position.assignedResource" class="unassigned">Unassigned</span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text"></p-button>
+              <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-text p-button-info"></p-button>
+              <p-button icon="pi pi-user-plus" styleClass="p-button-rounded p-button-text p-button-success" *ngIf="position.status === 'Open'"></p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div> 

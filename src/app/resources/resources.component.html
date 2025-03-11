@@ -1,0 +1,59 @@
+<div class="resources-container">
+  <h1>Resources</h1>
+  
+  <p-card styleClass="mb-4">
+    <div class="card-header">
+      <h2>Resource Management</h2>
+      <p-button label="Add Resource" icon="pi pi-plus" styleClass="p-button-success"></p-button>
+    </div>
+    
+    <p-table [value]="resources" [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rows]="10" 
+             styleClass="p-datatable-gridlines" [showCurrentPageReport]="true" [rowHover]="true"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+             [scrollable]="true" scrollHeight="400px">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Employee ID</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Location</th>
+          <th>Department</th>
+          <th>Assigned SOW</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-resource>
+        <tr>
+          <td>{{resource.employeeId}}</td>
+          <td>
+            <div class="resource-name">
+              <p-avatar [label]="resource.name.charAt(0)" styleClass="mr-2" [style]="{'background-color': 'var(--primary-color)', 'color': 'var(--primary-color-text)'}"></p-avatar>
+              <span>{{resource.name}}</span>
+            </div>
+          </td>
+          <td>{{resource.role}}</td>
+          <td>{{resource.location}}</td>
+          <td>{{resource.department}}</td>
+          <td>
+            <a href="#" class="sow-link">{{resource.assignedSow}}</a>
+          </td>
+          <td>{{resource.startDate | date:'mediumDate'}}</td>
+          <td>{{resource.endDate | date:'mediumDate'}}</td>
+          <td>
+            <p-tag [value]="resource.status" [severity]="getStatusSeverity(resource.status)"></p-tag>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text"></p-button>
+              <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-text p-button-info"></p-button>
+              <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-text p-button-danger"></p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div> 
