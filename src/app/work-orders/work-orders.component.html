@@ -1,58 +1,104 @@
 <div class="work-orders-container">
   <h1>Work Orders</h1>
-  
+
   <p-card styleClass="mb-4">
     <div class="card-header">
       <h2>Statement of Work (SOW) Management</h2>
-      <p-button label="Create SOW" icon="pi pi-plus" styleClass="p-button-success"></p-button>
+      <p-button
+        label="Create SOW"
+        icon="pi pi-plus"
+        styleClass="p-button-success"
+        (click)="openCreateWorkOrderPopup()"
+      ></p-button>
     </div>
-    
-    <p-table [value]="workOrders" [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rows]="10" 
-             styleClass="p-datatable-gridlines" [showCurrentPageReport]="true" [rowHover]="true"
-             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-             [scrollable]="true" scrollHeight="400px">
+
+    <p-table
+      [value]="workOrders"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [paginator]="true"
+      [rows]="10"
+      styleClass="p-datatable-gridlines"
+      [showCurrentPageReport]="true"
+      [rowHover]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [scrollable]="true"
+      scrollHeight="400px"
+    >
       <ng-template pTemplate="header">
         <tr>
-          <th>SOW ID</th>
-          <th>SOW Name</th>
+          <th>ID</th>
+          <th>Name</th>
           <th>Line Manager</th>
+          <th>CSX Escalation Manager</th>
+          <th>Compnova Escalation Manager</th>
+          <th>Total Positions</th>
+          <th>Total Amount</th>
           <th>Start Date</th>
           <th>End Date</th>
           <th>Status</th>
-          <th>Total Positions</th>
-          <th>Onsite Positions</th>
-          <th>Offshore Positions</th>
-          <th>Onsite Amount</th>
-          <th>Offshore Amount</th>
-          <th>Grand Total</th>
           <th>Actions</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-workOrder>
         <tr>
-          <td>{{workOrder.sowId}}</td>
-          <td>{{workOrder.sowName}}</td>
-          <td>{{workOrder.lineManager}}</td>
-          <td>{{workOrder.startDate | date:'mediumDate'}}</td>
-          <td>{{workOrder.endDate | date:'mediumDate'}}</td>
+          <td>{{ workOrder.statementOfWorkId }}</td>
+          <td>{{ workOrder.name }}</td>
           <td>
-            <p-tag [value]="workOrder.status" [severity]="getStatusSeverity(workOrder.status)"></p-tag>
+            {{ workOrder.lineManager.firstName }}
+            {{
+              workOrder.lineManager.middleName
+                ? workOrder.lineManager.middleName + " "
+                : ""
+            }}{{ workOrder.lineManager.lastName }}
           </td>
-          <td class="text-center">{{workOrder.totalPositions}}</td>
-          <td class="text-center">{{workOrder.onsitePositions}}</td>
-          <td class="text-center">{{workOrder.offshorePositions}}</td>
-          <td class="text-right">{{formatCurrency(workOrder.onsiteAmount)}}</td>
-          <td class="text-right">{{formatCurrency(workOrder.offshoreAmount)}}</td>
-          <td class="text-right font-bold">{{formatCurrency(workOrder.grandTotal)}}</td>
+          <td>
+            {{ workOrder.escalationManager.firstName }}
+            {{
+              workOrder.escalationManager.middleName
+                ? workOrder.escalationManager.middleName + " "
+                : ""
+            }}{{ workOrder.escalationManager.lastName }}
+          </td>
+          <td>
+            {{ workOrder.compnovaEscalationManager.firstName }}
+            {{
+              workOrder.compnovaEscalationManager.middleName
+                ? workOrder.compnovaEscalationManager.middleName + " "
+                : ""
+            }}{{ workOrder.compnovaEscalationManager.lastName }}
+          </td>
+          <td class="text-center">{{ workOrder?.totalPositions || 0 }}</td>
+          <td class="text-center">
+            {{ formatCurrency(workOrder.fixedBidAmount) }}
+          </td>
+          <td>{{ workOrder.startDate | date : "mediumDate" }}</td>
+          <td>{{ workOrder.endDate | date : "mediumDate" }}</td>
+          <td>
+            <p-tag
+              [value]="workOrder.status"
+              [severity]="getStatusSeverity(workOrder.status)"
+            ></p-tag>
+          </td>
           <td>
             <div class="action-buttons">
-              <p-button icon="pi pi-pencil" styleClass="p-button-rounded p-button-text"></p-button>
-              <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-text p-button-info"></p-button>
-              <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-text p-button-danger"></p-button>
+              <p-button
+                icon="pi pi-pencil"
+                styleClass="p-button-rounded p-button-text"
+                (click)="openEditWorkOrderPopup(workOrder)"
+              ></p-button>
+              <p-button
+                icon="pi pi-eye"
+                styleClass="p-button-rounded p-button-text p-button-info"
+              ></p-button>
+              <p-button
+                icon="pi pi-trash"
+                styleClass="p-button-rounded p-button-text p-button-danger"
+                (click)="confirmDelete(workOrder)"
+              ></p-button>
             </div>
           </td>
         </tr>
       </ng-template>
     </p-table>
   </p-card>
-</div> 
+</div>

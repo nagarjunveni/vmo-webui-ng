@@ -1,0 +1,147 @@
+<div class="create-edit-authorized-signature-container">
+  <p-toast></p-toast>
+
+  <form [formGroup]="authorizedSignatureForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <!-- First Name -->
+      <div class="field">
+        <label for="firstName">First Name*</label>
+        <input
+          id="firstName"
+          type="text"
+          pInputText
+          formControlName="firstName"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              authorizedSignatureForm.get('firstName')?.invalid &&
+              authorizedSignatureForm.get('firstName')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            authorizedSignatureForm.get('firstName')?.invalid &&
+            authorizedSignatureForm.get('firstName')?.touched
+          "
+          class="p-error"
+        >
+          First Name is required
+        </small>
+      </div>
+
+      <!-- Middle Name -->
+      <div class="field">
+        <label for="middleName">Middle Name</label>
+        <input
+          id="middleName"
+          type="text"
+          pInputText
+          formControlName="middleName"
+        />
+      </div>
+
+      <!-- Last Name -->
+      <div class="field">
+        <label for="lastName">Last Name*</label>
+        <input
+          id="lastName"
+          type="text"
+          pInputText
+          formControlName="lastName"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              authorizedSignatureForm.get('lastName')?.invalid &&
+              authorizedSignatureForm.get('lastName')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            authorizedSignatureForm.get('lastName')?.invalid &&
+            authorizedSignatureForm.get('lastName')?.touched
+          "
+          class="p-error"
+        >
+          Last Name is required
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="field">
+        <label for="email">Email*</label>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          formControlName="email"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              authorizedSignatureForm.get('email')?.invalid &&
+              authorizedSignatureForm.get('email')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            authorizedSignatureForm.get('email')?.invalid &&
+            authorizedSignatureForm.get('email')?.touched
+          "
+          class="p-error"
+        >
+          Valid email is required
+        </small>
+      </div>
+
+      <!-- Contact Number -->
+      <div class="field">
+        <label for="contactNumber">Contact Number*</label>
+        <input
+          id="contactNumber"
+          type="text"
+          pInputText
+          formControlName="contactNumber"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              authorizedSignatureForm.get('contactNumber')?.invalid &&
+              authorizedSignatureForm.get('contactNumber')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            authorizedSignatureForm.get('contactNumber')?.invalid &&
+            authorizedSignatureForm.get('contactNumber')?.touched
+          "
+          class="p-error"
+        >
+          Contact Number is required
+        </small>
+      </div>
+
+      <div class="field"></div>
+
+      <!-- <div class="field"></div> -->
+    </div>
+
+    <p-fileUpload
+      name="myfile"
+      [customUpload]="true"
+      (uploadHandler)="onUpload($event)"
+      accept="image/*"
+      maxFileSize="10000000"
+    >
+    </p-fileUpload>
+
+    <div class="form-actions">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        (click)="onCancel()"
+      ></p-button>
+      <p-button
+        type="submit"
+        label="Save"
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="authorizedSignatureForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</div>

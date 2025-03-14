@@ -1,0 +1,261 @@
+<div class="create-edit-vendor-container">
+  <p-toast></p-toast>
+
+  <form [formGroup]="vendorForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <!-- Employee Identification Number -->
+      <div class="field">
+        <label for="employeeIdentificationNumber"
+          >Employee Identification Number*</label
+        >
+        <input
+          id="employeeIdentificationNumber"
+          type="text"
+          pInputText
+          formControlName="employeeIdentificationNumber"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              vendorForm.get('employeeIdentificationNumber')?.invalid &&
+              vendorForm.get('employeeIdentificationNumber')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            vendorForm.get('employeeIdentificationNumber')?.invalid &&
+            vendorForm.get('employeeIdentificationNumber')?.touched
+          "
+          class="p-error"
+        >
+          Employee Identification Number is required
+        </small>
+      </div>
+
+      <!-- Company Name -->
+      <div class="field">
+        <label for="companyName">Company Name*</label>
+        <input
+          id="companyName"
+          type="text"
+          pInputText
+          formControlName="companyName"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              vendorForm.get('companyName')?.invalid &&
+              vendorForm.get('companyName')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            vendorForm.get('companyName')?.invalid &&
+            vendorForm.get('companyName')?.touched
+          "
+          class="p-error"
+        >
+          Company Name is required
+        </small>
+      </div>
+
+      <!-- First Name -->
+      <div class="field">
+        <label for="firstName">First Name*</label>
+        <input
+          id="firstName"
+          type="text"
+          pInputText
+          formControlName="firstName"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              vendorForm.get('firstName')?.invalid &&
+              vendorForm.get('firstName')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            vendorForm.get('firstName')?.invalid &&
+            vendorForm.get('firstName')?.touched
+          "
+          class="p-error"
+        >
+          First Name is required
+        </small>
+      </div>
+
+      <!-- Middle Name -->
+      <div class="field">
+        <label for="middleName">Middle Name</label>
+        <input
+          id="middleName"
+          type="text"
+          pInputText
+          formControlName="middleName"
+        />
+      </div>
+
+      <!-- Last Name -->
+      <div class="field">
+        <label for="lastName">Last Name*</label>
+        <input
+          id="lastName"
+          type="text"
+          pInputText
+          formControlName="lastName"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              vendorForm.get('lastName')?.invalid &&
+              vendorForm.get('lastName')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            vendorForm.get('lastName')?.invalid &&
+            vendorForm.get('lastName')?.touched
+          "
+          class="p-error"
+        >
+          Last Name is required
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="field">
+        <label for="email">Email*</label>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          formControlName="email"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              vendorForm.get('email')?.invalid &&
+              vendorForm.get('email')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            vendorForm.get('email')?.invalid && vendorForm.get('email')?.touched
+          "
+          class="p-error"
+        >
+          Valid email is required
+        </small>
+      </div>
+
+      <!-- Contact Number -->
+      <div class="field">
+        <label for="contactNumber">Contact Number*</label>
+        <input
+          id="contactNumber"
+          type="text"
+          pInputText
+          formControlName="contactNumber"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              vendorForm.get('contactNumber')?.invalid &&
+              vendorForm.get('contactNumber')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            vendorForm.get('contactNumber')?.invalid &&
+            vendorForm.get('contactNumber')?.touched
+          "
+          class="p-error"
+        >
+          Contact Number is required
+        </small>
+      </div>
+
+      <!-- Location -->
+      <div class="field">
+        <label for="location">Location*</label>
+        <input
+          id="location"
+          type="text"
+          pInputText
+          formControlName="location"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              vendorForm.get('location')?.invalid &&
+              vendorForm.get('location')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            vendorForm.get('location')?.invalid &&
+            vendorForm.get('location')?.touched
+          "
+          class="p-error"
+        >
+          Location is required
+        </small>
+      </div>
+
+      <!-- Rating -->
+      <div class="field">
+        <label for="rating">Rating*</label>
+        <p-rating
+          formControlName="rating"
+          [cancel]="false"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              vendorForm.get('rating')?.invalid &&
+              vendorForm.get('rating')?.touched
+          }"
+        ></p-rating>
+        <small
+          *ngIf="
+            vendorForm.get('rating')?.invalid &&
+            vendorForm.get('rating')?.touched
+          "
+          class="p-error"
+        >
+          Rating is required
+        </small>
+      </div>
+
+      <!-- Commission -->
+      <div class="field">
+        <label for="commission">Commission (%)*</label>
+        <p-inputNumber
+          id="commission"
+          formControlName="commission"
+          [showButtons]="true"
+          [min]="0"
+          [max]="100"
+          [step]="0.5"
+          suffix="%"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              vendorForm.get('commission')?.invalid &&
+              vendorForm.get('commission')?.touched
+          }"
+        ></p-inputNumber>
+        <small
+          *ngIf="
+            vendorForm.get('commission')?.invalid &&
+            vendorForm.get('commission')?.touched
+          "
+          class="p-error"
+        >
+          Commission is required (0-100%)
+        </small>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        (click)="onCancel()"
+      ></p-button>
+      <p-button
+        type="submit"
+        label="Save"
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="vendorForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</div>
