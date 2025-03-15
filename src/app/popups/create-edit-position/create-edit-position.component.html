@@ -1,0 +1,261 @@
+<div class="create-edit-position-container">
+  <p-toast></p-toast>
+
+  <form [formGroup]="positionForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <!-- Title -->
+      <div class="field">
+        <label for="title">Title*</label>
+        <input
+          id="title"
+          type="text"
+          pInputText
+          formControlName="title"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              positionForm.get('title')?.invalid &&
+              positionForm.get('title')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            positionForm.get('title')?.invalid &&
+            positionForm.get('title')?.touched
+          "
+          class="p-error"
+        >
+          Title is required
+        </small>
+      </div>
+
+      <!-- Description -->
+      <div class="field">
+        <label for="description">Description*</label>
+        <textarea
+          id="description"
+          pTextarea
+          formControlName="description"
+          [rows]="5"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              positionForm.get('description')?.invalid &&
+              positionForm.get('description')?.touched
+          }"
+        ></textarea>
+        <small
+          *ngIf="
+            positionForm.get('description')?.invalid &&
+            positionForm.get('description')?.touched
+          "
+          class="p-error"
+        >
+          Description is required
+        </small>
+      </div>
+
+      <!-- Rate Type Dropdown -->
+      <div class="field">
+        <label for="rateType">Rate Type*</label>
+        <p-dropdown
+          id="rateType"
+          formControlName="rateType"
+          [options]="rateOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Rate Type"
+          pTooltip="Select which rate you want to enter. Other rates will be calculated automatically."
+          tooltipPosition="top"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              positionForm.get('rateType')?.invalid &&
+              positionForm.get('rateType')?.touched
+          }"
+        ></p-dropdown>
+        <small
+          *ngIf="
+            positionForm.get('rateType')?.invalid &&
+            positionForm.get('rateType')?.touched
+          "
+          class="p-error"
+        >
+          Rate Type is required
+        </small>
+      </div>
+
+      <!-- Amount -->
+      <div class="field">
+        <label for="amount">Amount (Annual)*</label>
+        <p-inputNumber
+          id="amount"
+          formControlName="amount"
+          [showButtons]="true"
+          [min]="0"
+          mode="currency"
+          currency="USD"
+          pTooltip="Annual amount = Monthly Rate × 12 or Hourly Rate × 2,080"
+          tooltipPosition="top"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              positionForm.get('amount')?.invalid &&
+              positionForm.get('amount')?.touched
+          }"
+        ></p-inputNumber>
+        <small
+          *ngIf="
+            positionForm.get('amount')?.invalid &&
+            positionForm.get('amount')?.touched
+          "
+          class="p-error"
+        >
+          Amount is required and must be greater than 0
+        </small>
+      </div>
+
+      <!-- Monthly Rate -->
+      <div class="field">
+        <label for="monthlyRate">Monthly Rate*</label>
+        <p-inputNumber
+          id="monthlyRate"
+          formControlName="monthlyRate"
+          [showButtons]="true"
+          [min]="0"
+          mode="currency"
+          currency="USD"
+          pTooltip="Monthly Rate = Amount ÷ 12 or Hourly Rate × 160"
+          tooltipPosition="top"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              positionForm.get('monthlyRate')?.invalid &&
+              positionForm.get('monthlyRate')?.touched
+          }"
+        ></p-inputNumber>
+        <small
+          *ngIf="
+            positionForm.get('monthlyRate')?.invalid &&
+            positionForm.get('monthlyRate')?.touched
+          "
+          class="p-error"
+        >
+          Monthly Rate is required and must be greater than 0
+        </small>
+      </div>
+
+      <!-- Hourly Rate -->
+      <div class="field">
+        <label for="hourlyRate">Hourly Rate*</label>
+        <p-inputNumber
+          id="hourlyRate"
+          formControlName="hourlyRate"
+          [showButtons]="true"
+          [min]="0"
+          mode="currency"
+          currency="USD"
+          pTooltip="Hourly Rate = Amount ÷ 2,080 or Monthly Rate ÷ 160"
+          tooltipPosition="top"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              positionForm.get('hourlyRate')?.invalid &&
+              positionForm.get('hourlyRate')?.touched
+          }"
+        ></p-inputNumber>
+        <small
+          *ngIf="
+            positionForm.get('hourlyRate')?.invalid &&
+            positionForm.get('hourlyRate')?.touched
+          "
+          class="p-error"
+        >
+          Hourly Rate is required and must be greater than 0
+        </small>
+      </div>
+
+      <!-- Skills -->
+      <div class="field">
+        <label for="skills">Skills*</label>
+        <input
+          id="skills"
+          type="text"
+          pInputText
+          formControlName="skills"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              positionForm.get('skills')?.invalid &&
+              positionForm.get('skills')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            positionForm.get('skills')?.invalid &&
+            positionForm.get('skills')?.touched
+          "
+          class="p-error"
+        >
+          Skills are required
+        </small>
+      </div>
+
+      <!-- Expertise -->
+      <div class="field">
+        <label for="expertise">Expertise*</label>
+        <input
+          id="expertise"
+          type="text"
+          pInputText
+          formControlName="expertise"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              positionForm.get('expertise')?.invalid &&
+              positionForm.get('expertise')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            positionForm.get('expertise')?.invalid &&
+            positionForm.get('expertise')?.touched
+          "
+          class="p-error"
+        >
+          Expertise is required
+        </small>
+      </div>
+
+      <!-- Status -->
+      <div class="field">
+        <label for="status">Status</label>
+        <div class="p-field-checkbox">
+          <p-checkbox
+            id="status"
+            [binary]="true"
+            formControlName="status"
+          ></p-checkbox>
+          <label for="status" class="ml-2">Active</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-info">
+      <p><i class="pi pi-info-circle"></i> Rate calculations are based on:</p>
+      <ul>
+        <li>2,080 working hours per year (40 hours/week × 52 weeks)</li>
+        <li>160 working hours per month (40 hours/week × 4 weeks)</li>
+        <li>12 months per year</li>
+      </ul>
+    </div>
+
+    <div class="form-actions">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        (click)="onCancel()"
+      ></p-button>
+      <p-button
+        type="submit"
+        label="Save"
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="positionForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</div>

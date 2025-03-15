@@ -1,8 +1,8 @@
 .positions-container {
   padding: 1rem;
-  
+
   h1 {
-    color: var(--primary-color);
+    color: #2196F3;
     margin-bottom: 1.5rem;
   }
 }
@@ -12,11 +12,11 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
-  
+
   h2 {
     margin: 0;
     font-size: 1.5rem;
-    color: var(--text-color);
+    color: #333;
   }
 }
 
@@ -33,14 +33,22 @@
 .sow-link {
   color: var(--primary-color);
   text-decoration: none;
-  
+
   &:hover {
     text-decoration: underline;
   }
 }
 
+.text-center {
+  text-align: center;
+}
+
 .text-right {
   text-align: right;
+}
+
+.font-bold {
+  font-weight: bold;
 }
 
 .action-buttons {
@@ -53,45 +61,45 @@
     margin-bottom: 2rem;
     background-color: var(--surface-card);
     border: 1px solid var(--surface-border);
-    
+
     .p-card-content {
       padding: 0;
     }
   }
-  
+
   .mb-4 {
     margin-bottom: 1.5rem;
   }
-  
+
   .mr-2 {
     margin-right: 0.5rem;
   }
-  
+
   .p-datatable {
     .p-datatable-thead > tr > th {
-      background-color: var(--surface-section);
-      color: var(--text-color);
+      background-color: #f8f9fa;
+      color: #495057;
       font-weight: 600;
       border-color: var(--surface-border);
     }
-    
+
     .p-datatable-tbody > tr {
       background-color: var(--surface-card);
       color: var(--text-color);
       border-color: var(--surface-border);
-      
+
       &:hover {
-        background-color: var(--surface-hover);
+        background-color: #e3f2fd;
       }
-      
+
       > td {
         border-color: var(--surface-border);
       }
     }
-    
+
     .p-paginator {
       background-color: var(--surface-card);
       border-color: var(--surface-border);
     }
   }
-} 
+}
