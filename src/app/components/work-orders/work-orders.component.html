@@ -92,6 +92,12 @@
                 styleClass="p-button-rounded p-button-text p-button-info"
               ></p-button>
               <p-button
+                icon="pi pi-download"
+                styleClass="p-button-rounded p-button-text p-button-success"
+                (click)="downloadWorkOrder(workOrder)"
+                pTooltip="Download SOW Document"
+              ></p-button>
+              <p-button
                 icon="pi pi-trash"
                 styleClass="p-button-rounded p-button-text p-button-danger"
                 (click)="confirmDelete(workOrder)"

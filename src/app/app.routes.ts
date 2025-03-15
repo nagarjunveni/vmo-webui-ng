@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { WorkOrdersComponent } from './work-orders/work-orders.component';
-import { ResourcesComponent } from './resources/resources.component';
-import { PositionsComponent } from './positions/positions.component';
+import { WorkOrdersComponent } from './components/work-orders/work-orders.component';
+import { ResourcesComponent } from './components/resources/resources.component';
+import { PositionsComponent } from './components/positions/positions.component';
 import { LineManagersComponent } from './components/line-managers/line-managers.component';
 import { AuthorizedSignaturesComponent } from './components/authorized-signatures/authorized-signatures.component';
 import { VendorsComponent } from './components/vendors/vendors.component';

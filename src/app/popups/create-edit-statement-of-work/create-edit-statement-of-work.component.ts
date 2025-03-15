@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, NO_ERRORS_SCHEMA, OnInit, inject } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, OnInit, inject, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -55,10 +55,10 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
   isEditMode = false;
   loading = false;
   statementOfWork?: StatementOfWork;
-  authorizedSignaturesOptions: AuthorizedSignature[] = [];
-  lineManagersOptions: LineManager[] = [];
-  csxEscalationManagersOptions: LineManager[] = [];
-  compnovaEscalationManagersOptions: LineManager[] = [];
+  authorizedSignaturesOptions = signal<AuthorizedSignature[]>([]);
+  lineManagersOptions = signal<LineManager[]>([]);
+  csxEscalationManagersOptions = signal<LineManager[]>([]);
+  compnovaEscalationManagersOptions = signal<LineManager[]>([]);
 
   // Dropdown options
   typeOptions: DropdownOption[] = [
@@ -85,6 +85,8 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
+    this.loadAuthorizedSignatures();
+    this.loadLineManagers();
 
     if (this.config.data) {
       this.isEditMode = this.config.data.mode === 'edit';
@@ -94,9 +96,6 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
         this.populateForm(this.statementOfWork);
       }
     }
-
-    this.loadAuthorizedSignatures();
-    this.loadLineManagers();
   }
 
   initForm() {
@@ -124,17 +123,22 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       type: statementOfWork.type,
       projectState: statementOfWork.projectState,
       fixedBidAmount: statementOfWork.fixedBidAmount,
-      lineManagerId: statementOfWork.lineManagerId,
-      escalationManagerId: statementOfWork.csxEscalationManagerId,
-      compnovaEscalationManagerId: statementOfWork.compnovaEscalationManagerId,
-      authorizedSignatureId: statementOfWork.authorizedSignatureId,
+      lineManagerId: statementOfWork.lineManager.id,
+      escalationManagerId: statementOfWork.csxEscalationManager.id,
+      compnovaEscalationManagerId: statementOfWork.compnovaEscalationManager.id,
+      authorizedSignatureId: statementOfWork.authorizedSignature.id,
     });
   }
 
   loadAuthorizedSignatures() {
     this.authorizedSignatureService.getAllSignatures().subscribe(
       (authorizedSignatures: AuthorizedSignature[]) => {
-        this.authorizedSignaturesOptions = authorizedSignatures;
+        this.authorizedSignaturesOptions.set(authorizedSignatures);
+        // if (this.isEditMode && this.statementOfWork) {
+        //   this.StatementOfWorkForm.patchValue({
+        //     authorizedSignatureId: this.statementOfWork.authorizedSignatureId,
+        //   });
+        // }
       },
       (error) => {
         this.messageService.add({
@@ -149,16 +153,27 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
   loadLineManagers() {
     this.lineManagerService.getAllLineManagers().subscribe(
       (lineManagers: LineManager[]) => {
-        this.lineManagersOptions = lineManagers.filter(
+        this.lineManagersOptions.set(lineManagers.filter(
           (manager) => manager.type === LineManagerType.CSX_LINE_MANAGER
-        );
-        this.csxEscalationManagersOptions = lineManagers.filter(
+        ));
+        this.csxEscalationManagersOptions.set(lineManagers.filter(
           (manager) => manager.type === LineManagerType.CSX_ESCALATION_MANAGER
-        );
-        this.compnovaEscalationManagersOptions = lineManagers.filter(
+        ));
+        this.compnovaEscalationManagersOptions.set(lineManagers.filter(
           (manager) =>
             manager.type === LineManagerType.COMPNOVA_ESCALATION_MANAGER
-        );
+        ));
+        // if (this.isEditMode && this.statementOfWork) {
+        //   setTimeout(() => {
+        //   this.StatementOfWorkForm.patchValue({
+        //     lineManagerId: this.statementOfWork.lineManagerId,
+        //     escalationManagerId: this.statementOfWork.csxEscalationManagerId,
+        //     compnovaEscalationManagerId:
+        //       this.statementOfWork.compnovaEscalationManagerId,
+        //   });
+        //   this.StatementOfWorkForm.updateValueAndValidity()
+        // }, 1000);
+        // }
       },
       (error) => {
         this.messageService.add({

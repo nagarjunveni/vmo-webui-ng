@@ -176,7 +176,7 @@
         <p-select
           id="lineManagerId"
           formControlName="lineManagerId"
-          [options]="lineManagersOptions"
+          [options]="lineManagersOptions()"
           optionLabel="firstName"
           optionValue="id"
           placeholder="Select Line Manager"
@@ -203,7 +203,7 @@
         <p-select
           id="escalationManagerId"
           formControlName="escalationManagerId"
-          [options]="csxEscalationManagersOptions"
+          [options]="csxEscalationManagersOptions()"
           optionLabel="firstName"
           optionValue="id"
           placeholder="Select CSX Escalation Manager"
@@ -232,7 +232,7 @@
         <p-select
           id="compnovaEscalationManagerId"
           formControlName="compnovaEscalationManagerId"
-          [options]="compnovaEscalationManagersOptions"
+          [options]="compnovaEscalationManagersOptions()"
           optionLabel="firstName"
           optionValue="id"
           placeholder="Select Compnova Escalation Manager"
@@ -259,7 +259,7 @@
         <p-select
           id="authorizedSignatureId"
           formControlName="authorizedSignatureId"
-          [options]="authorizedSignaturesOptions"
+          [options]="authorizedSignaturesOptions()"
           optionLabel="firstName"
           optionValue="id"
           placeholder="Select Authorized Signature"

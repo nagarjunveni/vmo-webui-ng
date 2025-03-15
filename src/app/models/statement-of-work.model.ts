@@ -13,6 +13,7 @@ export interface StatementOfWork {
   projectState: string;
   projectStateDisplayName?: string;
   fixedBidAmount: number;
+  totalPositions?: number;
   lineManagerId?: number;
   lineManager?: LineManager;
   csxEscalationManagerId?: number;

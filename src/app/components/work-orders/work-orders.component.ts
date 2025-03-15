@@ -4,11 +4,11 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { WorkOrdersService } from '../services/work-orders.service';
+import { WorkOrdersService } from '../../services/work-orders.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { PopupService } from '../services/popup.service';
-import { StatementOfWork } from '../models/statement-of-work.model';
-import { CreateEditStatementOfWorkComponent } from '../popups/create-edit-statement-of-work/create-edit-statement-of-work.component';
+import { PopupService } from '../../services/popup.service';
+import { StatementOfWork } from '../../models/statement-of-work.model';
+import { CreateEditStatementOfWorkComponent } from '../../popups/create-edit-statement-of-work/create-edit-statement-of-work.component';
 
 @Component({
   selector: 'app-work-orders',
@@ -68,12 +68,12 @@ export class WorkOrdersComponent {
     });
   }
 
-  openEditWorkOrderPopup(workOrder: StatementOfWork) {
+  openEditWorkOrderPopup(statementOfWork: StatementOfWork) {
     const ref = this.popupService.openPopup(
       CreateEditStatementOfWorkComponent,
       {
         mode: 'edit',
-        workOrder: workOrder,
+        statementOfWork,
       },
       'Edit Work Order'
     );
@@ -118,6 +118,32 @@ export class WorkOrdersComponent {
         }
       }
     });
+  }
+
+  downloadWorkOrder(workOrder: StatementOfWork) {
+    try {
+      const blob = this.workOrdersService.generateWorkOrderPDF(workOrder);
+      const fileName = `SOW_${workOrder.statementOfWorkId || workOrder.id}_${new Date().getTime()}.pdf`;
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      window.URL.revokeObjectURL(url);
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Document generated and downloaded successfully'
+      });
+    } catch (error) {
+      console.error('Error generating document:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to generate document'
+      });
+    }
   }
 
   getStatusSeverity(
