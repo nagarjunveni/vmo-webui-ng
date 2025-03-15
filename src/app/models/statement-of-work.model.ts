@@ -6,8 +6,8 @@ export interface StatementOfWork {
   statementOfWorkId?: string;
   name: string;
   description?: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   type: string;
   typeDisplayName?: string;
   projectState: string;
@@ -15,13 +15,13 @@ export interface StatementOfWork {
   fixedBidAmount: number;
   lineManagerId?: number;
   lineManager?: LineManager;
-  escalationManagerId?: number;
-  escalationManager?: LineManager;
+  csxEscalationManagerId?: number;
+  csxEscalationManager?: LineManager;
   compnovaEscalationManagerId?: number;
   compnovaEscalationManager?: LineManager;
   authorizedSignatureId?: number;
   authorizedSignature?: AuthorizedSignature;
-  createdDate?: Date;
-  updatedDate?: Date;
+  createdDate?: string;
+  updatedDate?: string;
   status?: boolean;
 }

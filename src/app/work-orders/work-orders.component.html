@@ -23,6 +23,7 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [scrollable]="true"
       scrollHeight="400px"
+      [loading]="loading"
     >
       <ng-template pTemplate="header">
         <tr>
@@ -52,20 +53,20 @@
             }}{{ workOrder.lineManager.lastName }}
           </td>
           <td>
-            {{ workOrder.escalationManager.firstName }}
+            {{ workOrder.csxEscalationManager.firstName }}
             {{
-              workOrder.escalationManager.middleName
-                ? workOrder.escalationManager.middleName + " "
+              workOrder.csxEscalationManager.middleName
+                ? workOrder.csxEscalationManager.middleName + " "
                 : ""
-            }}{{ workOrder.escalationManager.lastName }}
+            }}{{ workOrder.csxEscalationManager.lastName }}
           </td>
           <td>
-            {{ workOrder.compnovaEscalationManager.firstName }}
+            {{ workOrder.compnovaEscalationManager?.firstName }}
             {{
-              workOrder.compnovaEscalationManager.middleName
-                ? workOrder.compnovaEscalationManager.middleName + " "
+              workOrder.compnovaEscalationManager?.middleName
+                ? workOrder.compnovaEscalationManager?.middleName + " "
                 : ""
-            }}{{ workOrder.compnovaEscalationManager.lastName }}
+            }}{{ workOrder.compnovaEscalationManager?.lastName }}
           </td>
           <td class="text-center">{{ workOrder?.totalPositions || 0 }}</td>
           <td class="text-center">
@@ -75,8 +76,8 @@
           <td>{{ workOrder.endDate | date : "mediumDate" }}</td>
           <td>
             <p-tag
-              [value]="workOrder.status"
-              [severity]="getStatusSeverity(workOrder.status)"
+              [value]="workOrder.projectStateDisplayName"
+              [severity]="getStatusSeverity(workOrder.projectState)"
             ></p-tag>
           </td>
           <td>

@@ -1,1 +1,300 @@
-<p>create-edit-statement-of-work works!</p>
+<div class="create-edit-sow-container">
+  <p-toast></p-toast>
+
+  <form [formGroup]="StatementOfWorkForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <!-- Name -->
+      <div class="field">
+        <label for="name">Project Name*</label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('name')?.invalid &&
+              StatementOfWorkForm.get('name')?.touched
+          }"
+        />
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('name')?.invalid &&
+            StatementOfWorkForm.get('name')?.touched
+          "
+          class="p-error"
+        >
+          Project Name is required
+        </small>
+      </div>
+
+      <!-- Description -->
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          pTextarea
+          formControlName="description"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <!-- Start Date -->
+      <div class="field">
+        <label for="startDate">Start Date*</label>
+        <p-calendar
+          id="startDate"
+          formControlName="startDate"
+          [showIcon]="true"
+          dateFormat="yy-mm-dd"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('startDate')?.invalid &&
+              StatementOfWorkForm.get('startDate')?.touched
+          }"
+        ></p-calendar>
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('startDate')?.invalid &&
+            StatementOfWorkForm.get('startDate')?.touched
+          "
+          class="p-error"
+        >
+          Start Date is required
+        </small>
+      </div>
+
+      <!-- End Date -->
+      <div class="field">
+        <label for="endDate">End Date*</label>
+        <p-calendar
+          id="endDate"
+          formControlName="endDate"
+          [showIcon]="true"
+          dateFormat="yy-mm-dd"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('endDate')?.invalid &&
+              StatementOfWorkForm.get('endDate')?.touched
+          }"
+        ></p-calendar>
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('endDate')?.invalid &&
+            StatementOfWorkForm.get('endDate')?.touched
+          "
+          class="p-error"
+        >
+          End Date is required
+        </small>
+      </div>
+
+      <!-- Type -->
+      <div class="field">
+        <label for="type">Type*</label>
+        <p-select
+          id="type"
+          formControlName="type"
+          [options]="typeOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Type"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('type')?.invalid &&
+              StatementOfWorkForm.get('type')?.touched
+          }"
+        ></p-select>
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('type')?.invalid &&
+            StatementOfWorkForm.get('type')?.touched
+          "
+          class="p-error"
+        >
+          Type is required
+        </small>
+      </div>
+
+      <!-- Project State -->
+      <div class="field">
+        <label for="projectState">Project State*</label>
+        <p-select
+          id="projectState"
+          formControlName="projectState"
+          [options]="projectStateOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Project State"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('projectState')?.invalid &&
+              StatementOfWorkForm.get('projectState')?.touched
+          }"
+        ></p-select>
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('projectState')?.invalid &&
+            StatementOfWorkForm.get('projectState')?.touched
+          "
+          class="p-error"
+        >
+          Project State is required
+        </small>
+      </div>
+
+      <!-- Fixed Bid Amount -->
+      <div class="field">
+        <label for="fixedBidAmount">Fixed Bid Amount*</label>
+        <p-inputNumber
+          id="fixedBidAmount"
+          formControlName="fixedBidAmount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [minFractionDigits]="2"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('fixedBidAmount')?.invalid &&
+              StatementOfWorkForm.get('fixedBidAmount')?.touched
+          }"
+        ></p-inputNumber>
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('fixedBidAmount')?.invalid &&
+            StatementOfWorkForm.get('fixedBidAmount')?.touched
+          "
+          class="p-error"
+        >
+          Fixed Bid Amount is required
+        </small>
+      </div>
+
+      <!-- Line Manager -->
+      <div class="field">
+        <label for="lineManagerId">Line Manager*</label>
+        <p-select
+          id="lineManagerId"
+          formControlName="lineManagerId"
+          [options]="lineManagersOptions"
+          optionLabel="firstName"
+          optionValue="id"
+          placeholder="Select Line Manager"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('lineManagerId')?.invalid &&
+              StatementOfWorkForm.get('lineManagerId')?.touched
+          }"
+        ></p-select>
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('lineManagerId')?.invalid &&
+            StatementOfWorkForm.get('lineManagerId')?.touched
+          "
+          class="p-error"
+        >
+          Line Manager is required
+        </small>
+      </div>
+
+      <!-- CSX Escalation Manager -->
+      <div class="field">
+        <label for="escalationManagerId">CSX Escalation Manager*</label>
+        <p-select
+          id="escalationManagerId"
+          formControlName="escalationManagerId"
+          [options]="csxEscalationManagersOptions"
+          optionLabel="firstName"
+          optionValue="id"
+          placeholder="Select CSX Escalation Manager"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('escalationManagerId')?.invalid &&
+              StatementOfWorkForm.get('escalationManagerId')?.touched
+          }"
+        ></p-select>
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('escalationManagerId')?.invalid &&
+            StatementOfWorkForm.get('escalationManagerId')?.touched
+          "
+          class="p-error"
+        >
+          CSX Escalation Manager is required
+        </small>
+      </div>
+
+      <!-- Compnova Escalation Manager -->
+      <div class="field">
+        <label for="compnovaEscalationManagerId"
+          >Compnova Escalation Manager*</label
+        >
+        <p-select
+          id="compnovaEscalationManagerId"
+          formControlName="compnovaEscalationManagerId"
+          [options]="compnovaEscalationManagersOptions"
+          optionLabel="firstName"
+          optionValue="id"
+          placeholder="Select Compnova Escalation Manager"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('compnovaEscalationManagerId')?.invalid &&
+              StatementOfWorkForm.get('compnovaEscalationManagerId')?.touched
+          }"
+        ></p-select>
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('compnovaEscalationManagerId')?.invalid &&
+            StatementOfWorkForm.get('compnovaEscalationManagerId')?.touched
+          "
+          class="p-error"
+        >
+          Compnova Escalation Manager is required
+        </small>
+      </div>
+
+      <!-- Authorized Signature -->
+      <div class="field">
+        <label for="authorizedSignatureId">Authorized Signature*</label>
+        <p-select
+          id="authorizedSignatureId"
+          formControlName="authorizedSignatureId"
+          [options]="authorizedSignaturesOptions"
+          optionLabel="firstName"
+          optionValue="id"
+          placeholder="Select Authorized Signature"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              StatementOfWorkForm.get('authorizedSignatureId')?.invalid &&
+              StatementOfWorkForm.get('authorizedSignatureId')?.touched
+          }"
+        ></p-select>
+        <small
+          *ngIf="
+            StatementOfWorkForm.get('authorizedSignatureId')?.invalid &&
+            StatementOfWorkForm.get('authorizedSignatureId')?.touched
+          "
+          class="p-error"
+        >
+          Authorized Signature is required
+        </small>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        (click)="onCancel()"
+      ></p-button>
+      <p-button
+        type="submit"
+        label="Save"
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="StatementOfWorkForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</div>
