@@ -1,0 +1,423 @@
+<div class="create-edit-employee-container">
+  <p-toast></p-toast>
+
+  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <div class="form-column">
+        <!-- Basic Information Section -->
+        <div class="form-section">
+          <h3>Basic Information</h3>
+
+          <!-- Profile Picture -->
+          <div class="profile-picture-section">
+            <div
+              class="profile-preview"
+              [ngClass]="{ 'has-image': profileImagePreview }"
+            >
+              <img
+                *ngIf="profileImagePreview"
+                [src]="profileImagePreview"
+                alt="Profile Picture"
+              />
+              <i *ngIf="!profileImagePreview" class="pi pi-user"></i>
+            </div>
+
+            <div class="profile-actions">
+              <p-fileUpload
+                mode="basic"
+                chooseLabel="Upload Picture"
+                [auto]="true"
+                accept="image/*"
+                [maxFileSize]="1000000"
+                (onSelect)="onFileSelect($event)"
+                styleClass="p-button-sm"
+              ></p-fileUpload>
+
+              <p-button
+                *ngIf="profileImagePreview"
+                type="button"
+                icon="pi pi-trash"
+                label="Remove"
+                styleClass="p-button-sm p-button-danger p-button-text"
+                (click)="clearProfilePicture()"
+              ></p-button>
+            </div>
+          </div>
+
+          <!-- Name Fields -->
+          <div class="form-row">
+            <div class="field">
+              <label for="firstName">First Name*</label>
+              <input
+                id="firstName"
+                type="text"
+                pInputText
+                formControlName="firstName"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('firstName')?.invalid &&
+                    employeeForm.get('firstName')?.touched
+                }"
+              />
+              <small
+                *ngIf="
+                  employeeForm.get('firstName')?.invalid &&
+                  employeeForm.get('firstName')?.touched
+                "
+                class="p-error"
+              >
+                First Name is required
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="middleName">Middle Name</label>
+              <input
+                id="middleName"
+                type="text"
+                pInputText
+                formControlName="middleName"
+              />
+            </div>
+
+            <div class="field">
+              <label for="lastName">Last Name*</label>
+              <input
+                id="lastName"
+                type="text"
+                pInputText
+                formControlName="lastName"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('lastName')?.invalid &&
+                    employeeForm.get('lastName')?.touched
+                }"
+              />
+              <small
+                *ngIf="
+                  employeeForm.get('lastName')?.invalid &&
+                  employeeForm.get('lastName')?.touched
+                "
+                class="p-error"
+              >
+                Last Name is required
+              </small>
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="form-row">
+            <div class="field">
+              <label for="email">Email*</label>
+              <input
+                id="email"
+                type="email"
+                pInputText
+                formControlName="email"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('email')?.invalid &&
+                    employeeForm.get('email')?.touched
+                }"
+              />
+              <small
+                *ngIf="
+                  employeeForm.get('email')?.invalid &&
+                  employeeForm.get('email')?.touched
+                "
+                class="p-error"
+              >
+                <span *ngIf="employeeForm.get('email')?.errors?.['required']"
+                  >Email is required</span
+                >
+                <span *ngIf="employeeForm.get('email')?.errors?.['email']"
+                  >Please enter a valid email address</span
+                >
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="contactNumber">Contact Number*</label>
+              <input
+                id="contactNumber"
+                type="text"
+                pInputText
+                formControlName="contactNumber"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('contactNumber')?.invalid &&
+                    employeeForm.get('contactNumber')?.touched
+                }"
+              />
+              <small
+                *ngIf="
+                  employeeForm.get('contactNumber')?.invalid &&
+                  employeeForm.get('contactNumber')?.touched
+                "
+                class="p-error"
+              >
+                <span
+                  *ngIf="employeeForm.get('contactNumber')?.errors?.['required']"
+                  >Contact Number is required</span
+                >
+                <span
+                  *ngIf="employeeForm.get('contactNumber')?.errors?.['pattern']"
+                  >Please enter a valid contact number</span
+                >
+              </small>
+            </div>
+          </div>
+
+          <!-- Personal Information -->
+          <div class="form-row">
+            <div class="field">
+              <label for="dateOfBirth">Date of Birth*</label>
+              <p-calendar
+                id="dateOfBirth"
+                formControlName="dateOfBirth"
+                [showIcon]="true"
+                dateFormat="yy-mm-dd"
+                [maxDate]="maxDate"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('dateOfBirth')?.invalid &&
+                    employeeForm.get('dateOfBirth')?.touched
+                }"
+              ></p-calendar>
+              <small
+                *ngIf="
+                  employeeForm.get('dateOfBirth')?.invalid &&
+                  employeeForm.get('dateOfBirth')?.touched
+                "
+                class="p-error"
+              >
+                Date of Birth is required
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="gender">Gender*</label>
+              <p-dropdown
+                id="gender"
+                formControlName="gender"
+                [options]="genderOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Gender"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('gender')?.invalid &&
+                    employeeForm.get('gender')?.touched
+                }"
+                appendTo="body"
+              ></p-dropdown>
+              <small
+                *ngIf="
+                  employeeForm.get('gender')?.invalid &&
+                  employeeForm.get('gender')?.touched
+                "
+                class="p-error"
+              >
+                Gender is required
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-column">
+        <!-- Employment Information Section -->
+        <div class="form-section">
+          <h3>Employment Information</h3>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="workLocation">Work Location*</label>
+              <p-dropdown
+                id="workLocation"
+                formControlName="workLocation"
+                [options]="workLocationOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Work Location"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('workLocation')?.invalid &&
+                    employeeForm.get('workLocation')?.touched
+                }"
+                appendTo="body"
+              ></p-dropdown>
+              <small
+                *ngIf="
+                  employeeForm.get('workLocation')?.invalid &&
+                  employeeForm.get('workLocation')?.touched
+                "
+                class="p-error"
+              >
+                Work Location is required
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="employmentType">Employment Type*</label>
+              <p-dropdown
+                id="employmentType"
+                formControlName="employmentType"
+                [options]="employmentTypeOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Employment Type"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('employmentType')?.invalid &&
+                    employeeForm.get('employmentType')?.touched
+                }"
+                appendTo="body"
+              ></p-dropdown>
+              <small
+                *ngIf="
+                  employeeForm.get('employmentType')?.invalid &&
+                  employeeForm.get('employmentType')?.touched
+                "
+                class="p-error"
+              >
+                Employment Type is required
+              </small>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="employmentStatus">Employment Status*</label>
+              <p-dropdown
+                id="employmentStatus"
+                formControlName="employmentStatus"
+                [options]="employmentStatusOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Employment Status"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('employmentStatus')?.invalid &&
+                    employeeForm.get('employmentStatus')?.touched
+                }"
+                appendTo="body"
+              ></p-dropdown>
+              <small
+                *ngIf="
+                  employeeForm.get('employmentStatus')?.invalid &&
+                  employeeForm.get('employmentStatus')?.touched
+                "
+                class="p-error"
+              >
+                Employment Status is required
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="startDate">Start Date*</label>
+              <p-calendar
+                id="startDate"
+                formControlName="startDate"
+                [showIcon]="true"
+                dateFormat="yy-mm-dd"
+                [ngClass]="{
+                  'ng-invalid ng-dirty':
+                    employeeForm.get('startDate')?.invalid &&
+                    employeeForm.get('startDate')?.touched
+                }"
+              ></p-calendar>
+              <small
+                *ngIf="
+                  employeeForm.get('startDate')?.invalid &&
+                  employeeForm.get('startDate')?.touched
+                "
+                class="p-error"
+              >
+                Start Date is required
+              </small>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="department">Department</label>
+              <input
+                id="department"
+                type="text"
+                pInputText
+                formControlName="department"
+              />
+            </div>
+
+            <div class="field">
+              <label for="location">Location</label>
+              <input
+                id="location"
+                type="text"
+                pInputText
+                formControlName="location"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="vendorId">Vendor</label>
+              <p-dropdown
+                id="vendorId"
+                formControlName="vendorId"
+                [options]="vendorOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Vendor"
+                appendTo="body"
+              ></p-dropdown>
+            </div>
+
+            <div class="field checkbox-field">
+              <div class="checkbox-container">
+                <p-checkbox
+                  id="isFreelancer"
+                  formControlName="isFreelancer"
+                  [binary]="true"
+                  inputId="isFreelancer"
+                ></p-checkbox>
+                <label for="isFreelancer">Is Freelancer</label>
+              </div>
+
+              <div class="switch-container">
+                <label for="status">Status</label>
+                <p-inputSwitch
+                  id="status"
+                  formControlName="status"
+                ></p-inputSwitch>
+                <span class="status-label">{{
+                  employeeForm.get("status")?.value ? "Active" : "Inactive"
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <p-button
+        type="button"
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        (click)="onCancel()"
+      ></p-button>
+
+      <p-button
+        type="submit"
+        label="Save"
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="employeeForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</div>
