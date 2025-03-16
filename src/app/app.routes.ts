@@ -5,10 +5,12 @@ import { PositionsComponent } from './components/positions/positions.component';
 import { LineManagersComponent } from './components/line-managers/line-managers.component';
 import { AuthorizedSignaturesComponent } from './components/authorized-signatures/authorized-signatures.component';
 import { VendorsComponent } from './components/vendors/vendors.component';
+import { ViewStatementOfWorkComponent } from './components/view-statement-of-work/view-statement-of-work.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'work-orders', pathMatch: 'full' },
   { path: 'work-orders', component: WorkOrdersComponent },
+  { path: 'work-orders/:id', component: ViewStatementOfWorkComponent },
   { path: 'resources', component: ResourcesComponent },
   { path: 'positions', component: PositionsComponent },
   { path: 'vendors', component: VendorsComponent },

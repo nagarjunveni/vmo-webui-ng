@@ -1,0 +1,455 @@
+<div class="view-sow-container">
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <div class="page-header">
+    <div class="title-section">
+      <h1>Statement of Work Details</h1>
+      <p-tag
+        *ngIf="statementOfWork"
+        [value]="
+          statementOfWork.projectStateDisplayName ||
+          statementOfWork.projectState
+        "
+        [severity]="
+          statementOfWork.projectState === 'APPROVED'
+            ? 'success'
+            : statementOfWork.projectState === 'PENDING_APPROVAL'
+            ? 'warning'
+            : statementOfWork.projectState === 'REJECTED'
+            ? 'danger'
+            : 'info'
+        "
+        styleClass="status-tag"
+      ></p-tag>
+    </div>
+    <p-button
+      icon="pi pi-arrow-left"
+      label="Back to Work Orders"
+      (click)="navigateBack()"
+      styleClass="p-button-text"
+    ></p-button>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p>Loading Statement of Work details...</p>
+  </div>
+
+  <div *ngIf="!loading && statementOfWork" class="content-container">
+    <!-- SOW Details Section -->
+    <div class="sow-details-container">
+      <div class="sow-header">
+        <h2>SOW Information</h2>
+        <div class="sow-id">
+          <span class="label">SOW ID:</span>
+          <span class="value">{{
+            statementOfWork.statementOfWorkId || "N/A"
+          }}</span>
+        </div>
+      </div>
+
+      <div class="sow-content">
+        <!-- Basic Info Section -->
+        <div class="info-section">
+          <h3>Basic Information</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Name</span>
+              <span class="value">{{ statementOfWork.name }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Type</span>
+              <span class="value">{{
+                statementOfWork.typeDisplayName || statementOfWork.type
+              }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Start Date</span>
+              <span class="value">{{
+                statementOfWork.startDate | date : "mediumDate"
+              }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">End Date</span>
+              <span class="value">{{
+                statementOfWork.endDate | date : "mediumDate"
+              }}</span>
+            </div>
+            <div class="info-item" *ngIf="statementOfWork.type === 'FIXED_BID'">
+              <span class="label">Fixed Bid Amount</span>
+              <span class="value highlight">{{
+                formatCurrency(statementOfWork.fixedBidAmount)
+              }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Onsite Count</span>
+              <span class="value">{{ statementOfWork.onsiteCount || 0 }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Offshore Count</span>
+              <span class="value">{{
+                statementOfWork.offshoreCount || 0
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description Section -->
+        <div class="info-section">
+          <h3>Description</h3>
+          <div class="description-content">
+            <p>
+              {{ statementOfWork.description || "No description provided." }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Contacts Section -->
+        <div class="info-section">
+          <h3>Contacts</h3>
+          <div class="contacts-grid">
+            <div class="contact-card">
+              <div class="contact-header">
+                <i class="pi pi-user"></i>
+                <h4>Line Manager</h4>
+              </div>
+              <div class="contact-details">
+                <span class="name">{{
+                  getFullName(statementOfWork.lineManager)
+                }}</span>
+                <span class="email" *ngIf="statementOfWork.lineManager?.email">
+                  <i class="pi pi-envelope"></i>
+                  {{ statementOfWork.lineManager.email }}
+                </span>
+                <span
+                  class="phone"
+                  *ngIf="statementOfWork.lineManager?.contactNumber"
+                >
+                  <i class="pi pi-phone"></i>
+                  {{ statementOfWork.lineManager.contactNumber }}
+                </span>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-header">
+                <i class="pi pi-user"></i>
+                <h4>CSX Escalation Manager</h4>
+              </div>
+              <div class="contact-details">
+                <span class="name">{{
+                  getFullName(statementOfWork.csxEscalationManager)
+                }}</span>
+                <span
+                  class="email"
+                  *ngIf="statementOfWork.csxEscalationManager?.email"
+                >
+                  <i class="pi pi-envelope"></i>
+                  {{ statementOfWork.csxEscalationManager.email }}
+                </span>
+                <span
+                  class="phone"
+                  *ngIf="statementOfWork.csxEscalationManager?.contactNumber"
+                >
+                  <i class="pi pi-phone"></i>
+                  {{ statementOfWork.csxEscalationManager.contactNumber }}
+                </span>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-header">
+                <i class="pi pi-user"></i>
+                <h4>Compnova Escalation Manager</h4>
+              </div>
+              <div class="contact-details">
+                <span class="name">{{
+                  getFullName(statementOfWork.compnovaEscalationManager)
+                }}</span>
+                <span
+                  class="email"
+                  *ngIf="statementOfWork.compnovaEscalationManager?.email"
+                >
+                  <i class="pi pi-envelope"></i>
+                  {{ statementOfWork.compnovaEscalationManager.email }}
+                </span>
+                <span
+                  class="phone"
+                  *ngIf="
+                    statementOfWork.compnovaEscalationManager?.contactNumber
+                  "
+                >
+                  <i class="pi pi-phone"></i>
+                  {{ statementOfWork.compnovaEscalationManager.contactNumber }}
+                </span>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-header">
+                <i class="pi pi-user"></i>
+                <h4>Authorized Signature</h4>
+              </div>
+              <div class="contact-details">
+                <span class="name">{{
+                  getFullName(statementOfWork.authorizedSignature)
+                }}</span>
+                <span
+                  class="email"
+                  *ngIf="statementOfWork.authorizedSignature?.email"
+                >
+                  <i class="pi pi-envelope"></i>
+                  {{ statementOfWork.authorizedSignature.email }}
+                </span>
+                <span
+                  class="phone"
+                  *ngIf="statementOfWork.authorizedSignature?.contactNumber"
+                >
+                  <i class="pi pi-phone"></i>
+                  {{ statementOfWork.authorizedSignature.contactNumber }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Positions Section -->
+    <div class="positions-container">
+      <div class="positions-header">
+        <h2>Positions</h2>
+        <p-button
+          label="Add Position"
+          icon="pi pi-plus"
+          styleClass="p-button-sm p-button-success"
+          (click)="openAddPositionDialog()"
+        ></p-button>
+      </div>
+
+      <p-table
+        #table
+        [value]="positions"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        styleClass="positions-table"
+        [paginator]="positions.length > 10"
+        [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} positions"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="[
+          'position.title',
+          'position.description',
+          'type',
+          'position.skills'
+        ]"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="caption">
+          <div class="table-header">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                placeholder="Search positions..."
+                #filter
+                (input)="table.filterGlobal(filter.value, 'contains')"
+              />
+            </span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 20%">Position Title</th>
+            <th style="width: 15%">Description</th>
+            <th style="width: 10%">Type</th>
+            <th style="width: 10%">Amount</th>
+            <th style="width: 10%">Hourly Rate</th>
+            <th style="width: 10%">Monthly Rate</th>
+            <th style="width: 15%">Skills</th>
+            <th style="width: 5%">Actions</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-position>
+          <tr>
+            <td>
+              <div class="cell-content">
+                {{ position.position?.title || "N/A" }}
+              </div>
+            </td>
+            <td>
+              <div class="cell-content description-cell">
+                {{ position.position?.description || "N/A" }}
+              </div>
+            </td>
+            <td>
+              <div class="cell-content">
+                <span
+                  class="position-type"
+                  [ngClass]="position.type === 'Onsite' ? 'onsite' : 'offshore'"
+                >
+                  {{ position.type }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="cell-content">
+                {{
+                  position.position?.amount
+                    ? formatCurrency(position.position.amount)
+                    : "N/A"
+                }}
+              </div>
+            </td>
+            <td>
+              <div class="cell-content">
+                {{
+                  position.position?.hourlyRate
+                    ? formatCurrency(position.position.hourlyRate)
+                    : "N/A"
+                }}
+              </div>
+            </td>
+            <td>
+              <div class="cell-content">
+                {{
+                  position.position?.monthlyRate
+                    ? formatCurrency(position.position.monthlyRate)
+                    : "N/A"
+                }}
+              </div>
+            </td>
+            <td>
+              <div class="cell-content skills-cell">
+                <div class="skills-list" *ngIf="position.position?.skills">
+                  <span
+                    class="skill-tag"
+                    *ngFor="
+                      let skill of getSkillsArray(position.position.skills)
+                    "
+                  >
+                    {{ skill }}
+                  </span>
+                </div>
+                <span *ngIf="!position.position?.skills">N/A</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell-content actions-cell">
+                <p-button
+                  icon="pi pi-trash"
+                  styleClass="p-button-rounded p-button-danger p-button-text"
+                  (click)="confirmDeletePosition(position)"
+                  pTooltip="Delete Position"
+                  tooltipPosition="left"
+                ></p-button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="text-center">
+              <div class="empty-message">
+                <i class="pi pi-info-circle"></i>
+                <p>No positions found for this Statement of Work.</p>
+                <p class="empty-action">
+                  Click "Add Position" to add positions to this SOW.
+                </p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <!-- Add Position Dialog -->
+  <p-dialog
+    [(visible)]="displayAddPositionDialog"
+    [style]="{ width: '450px' }"
+    header="Add Position"
+    [modal]="true"
+    styleClass="p-fluid position-dialog"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="closeAddPositionDialog()"
+  >
+    <form [formGroup]="addPositionForm" (ngSubmit)="addPosition()">
+      <div class="field">
+        <label for="positionId">Position*</label>
+        <p-select
+          id="positionId"
+          formControlName="positionId"
+          [options]="availablePositions"
+          optionLabel="title"
+          optionValue="id"
+          placeholder="Select Position"
+          [filter]="true"
+          [showClear]="true"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              addPositionForm.get('positionId')?.invalid &&
+              addPositionForm.get('positionId')?.touched
+          }"
+        ></p-select>
+        <small
+          *ngIf="
+            addPositionForm.get('positionId')?.invalid &&
+            addPositionForm.get('positionId')?.touched
+          "
+          class="p-error"
+        >
+          Position is required
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="type">Type*</label>
+        <p-select
+          id="type"
+          formControlName="type"
+          [options]="positionTypeOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Type"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              addPositionForm.get('type')?.invalid &&
+              addPositionForm.get('type')?.touched
+          }"
+        ></p-select>
+        <small
+          *ngIf="
+            addPositionForm.get('type')?.invalid &&
+            addPositionForm.get('type')?.touched
+          "
+          class="p-error"
+        >
+          Type is required
+        </small>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        (click)="closeAddPositionDialog()"
+      ></p-button>
+      <p-button
+        label="Save"
+        icon="pi pi-check"
+        styleClass="p-button-text"
+        (click)="addPosition()"
+        [disabled]="addPositionForm.invalid"
+      ></p-button>
+    </ng-template>
+  </p-dialog>
+</div>

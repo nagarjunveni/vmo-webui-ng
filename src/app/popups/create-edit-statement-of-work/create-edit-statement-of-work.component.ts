@@ -124,6 +124,9 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
         this.statementOfWork = this.config.data.statementOfWork;
         this.populateForm(this.statementOfWork);
         this.loadStatementOfWorkPositions(this.statementOfWork.id!);
+        this.workOrdersService.getWorkOrderById(this.statementOfWork.id!).subscribe(data => {
+          console.log(data);
+        });
       }
     }
   }

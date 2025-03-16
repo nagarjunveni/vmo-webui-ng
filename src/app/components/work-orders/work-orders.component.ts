@@ -1,9 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { WorkOrdersService } from '../../services/work-orders.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PopupService } from '../../services/popup.service';
@@ -13,7 +17,16 @@ import { CreateEditStatementOfWorkComponent } from '../../popups/create-edit-sta
 @Component({
   selector: 'app-work-orders',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, CardModule, TagModule],
+  imports: [
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    CardModule,
+    TagModule,
+    TooltipModule,
+    ToastModule,
+    ConfirmDialogModule
+  ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './work-orders.component.html',
   styleUrl: './work-orders.component.scss',
@@ -27,6 +40,7 @@ export class WorkOrdersComponent {
   private messageService: MessageService = inject(MessageService);
   private workOrdersService: WorkOrdersService = inject(WorkOrdersService);
   private popupService: PopupService = inject(PopupService);
+  private router: Router = inject(Router);
 
   ngOnInit() {
     this.loadWorkOrders();
@@ -173,5 +187,17 @@ export class WorkOrdersComponent {
       style: 'currency',
       currency: 'USD',
     }).format(amount);
+  }
+
+  viewWorkOrder(workOrder: StatementOfWork) {
+    if (workOrder && workOrder.id) {
+      this.router.navigate(['/work-orders', workOrder.id]);
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Cannot view Statement of Work. ID is missing.'
+      });
+    }
   }
 }

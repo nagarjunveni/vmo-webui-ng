@@ -1,4 +1,7 @@
 <div class="work-orders-container">
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
   <h1>Work Orders</h1>
 
   <p-card styleClass="mb-4">
@@ -90,6 +93,8 @@
               <p-button
                 icon="pi pi-eye"
                 styleClass="p-button-rounded p-button-text p-button-info"
+                (click)="viewWorkOrder(workOrder)"
+                pTooltip="View SOW Details"
               ></p-button>
               <p-button
                 icon="pi pi-download"
