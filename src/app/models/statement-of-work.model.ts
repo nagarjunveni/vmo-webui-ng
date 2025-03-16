@@ -1,5 +1,6 @@
 import { AuthorizedSignature } from "./authorized-signature.model";
 import { LineManager } from "./line-manager.model";
+import { StatementOfWorkPosition } from "./statement-of-work-position.model";
 
 export interface StatementOfWork {
   id?: number;
@@ -25,4 +26,5 @@ export interface StatementOfWork {
   createdDate?: string;
   updatedDate?: string;
   status?: boolean;
+  positions?: StatementOfWorkPosition[];
 }

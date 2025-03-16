@@ -20,7 +20,7 @@
         font-weight: 500;
       }
 
-      input, textarea, p-calendar, p-dropdown, p-inputNumber {
+      input, textarea, p-datepicker, p-select, p-inputNumber {
         width: 100%;
       }
 
@@ -30,10 +30,163 @@
     }
   }
 
+  .positions-section {
+    margin-bottom: 2rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 1rem;
+    background-color: #f8f9fa;
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #333;
+      }
+    }
+
+    .positions-table {
+      margin-bottom: 1rem;
+
+      :host ::ng-deep {
+        .p-datatable .p-datatable-thead > tr > th {
+          background-color: #f1f1f1;
+          padding: 0.5rem;
+          font-weight: 600;
+        }
+
+        .p-datatable .p-datatable-tbody > tr > td {
+          padding: 0.5rem;
+          vertical-align: middle;
+        }
+
+        .p-checkbox {
+          display: flex;
+          justify-content: center;
+        }
+
+        .p-select {
+          width: 100%;
+          min-width: 100%;
+
+          .p-select-label {
+            padding: 0.5rem;
+          }
+
+          .p-select-trigger {
+            padding: 0 0.5rem;
+          }
+        }
+
+        .p-overlay-panel {
+          .p-select-items {
+            padding: 0.5rem 0;
+          }
+
+          .p-select-item {
+            padding: 0.5rem 1rem;
+          }
+        }
+
+        .p-button.p-button-text {
+          padding: 0.25rem;
+        }
+      }
+    }
+
+    .no-positions {
+      padding: 1rem;
+      text-align: center;
+      background-color: #fff;
+      border-radius: 4px;
+      border: 1px dashed #ccc;
+
+      p {
+        margin: 0;
+        color: #666;
+      }
+    }
+  }
+
   .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1rem;
+  }
+}
+
+// Global styles for PrimeNG components
+:host ::ng-deep {
+  .p-select {
+    min-width: 100%;
+    width: 100%;
+
+    .p-select-label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .p-overlay-panel {
+    min-width: 100%;
+    z-index: 1000 !important;
+
+    .p-select-items-wrapper {
+      max-height: 200px;
+    }
+
+    .p-select-item {
+      white-space: normal;
+      word-break: break-word;
+    }
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  // Fix for mobile responsiveness
+  @media (max-width: 768px) {
+    .p-datatable-responsive-scroll .p-datatable-tbody > tr > td,
+    .p-datatable-responsive-scroll .p-datatable-thead > tr > th {
+      min-width: 10rem;
+    }
+
+    .p-overlay-panel {
+      width: 90vw !important;
+      max-width: 90vw !important;
+      left: 5vw !important;
+    }
+  }
+}
+
+// Styles for body-appended overlay panels
+:root {
+  .p-overlay-panel {
+    &[ng-reflect-visible="true"] {
+      display: block !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .p-select-items {
+      padding: 0.5rem 0;
+    }
+
+    .p-select-item {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
   }
 }

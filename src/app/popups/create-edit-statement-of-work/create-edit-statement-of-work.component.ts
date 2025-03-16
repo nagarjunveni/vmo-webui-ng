@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, NO_ERRORS_SCHEMA, OnInit, inject, signal } from '@angular/core';
+import {
+  Component,
+  NO_ERRORS_SCHEMA,
+  OnInit,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormArray,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -19,10 +26,18 @@ import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { AuthorizedSignatureService } from '../../services/authorized-signature.service';
 import { WorkOrdersService } from '../../services/work-orders.service';
 import { LineManagerService } from '../../services/line-manager.service';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { TextareaModule } from 'primeng/textarea';
+import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { TableModule } from 'primeng/table';
+import { CheckboxModule } from 'primeng/checkbox';
+import { Position } from '../../models/position.model';
+import { PositionService } from '../../services/position.service';
+import {
+  StatementOfWorkPosition,
+  PositionType,
+} from '../../models/statement-of-work-position.model';
+import { StatementOfWorkPositionService } from '../../services/statement-of-work-position.service';
 
 interface DropdownOption {
   label: string;
@@ -40,10 +55,11 @@ interface DropdownOption {
     InputTextModule,
     InputNumberModule,
     TextareaModule,
-    CalendarModule,
-    DropdownModule,
+    DatePickerModule,
+    SelectModule,
     ToastModule,
-    SelectModule
+    TableModule,
+    CheckboxModule,
   ],
   providers: [MessageService],
   schemas: [NO_ERRORS_SCHEMA],
@@ -59,6 +75,8 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
   lineManagersOptions = signal<LineManager[]>([]);
   csxEscalationManagersOptions = signal<LineManager[]>([]);
   compnovaEscalationManagersOptions = signal<LineManager[]>([]);
+  positionsOptions = signal<Position[]>([]);
+  sowPositions: StatementOfWorkPosition[] = [];
 
   // Dropdown options
   typeOptions: DropdownOption[] = [
@@ -75,10 +93,20 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
     { label: 'Cancelled', value: 'CANCELLED' },
   ];
 
+  positionTypeOptions = [
+    { label: 'Onsite', value: PositionType.ONSITE },
+    { label: 'Offshore', value: PositionType.OFFSHORE },
+  ];
+
+  // Dropdown configuration
+  overlayAppendTo = 'body'; // Append dropdown overlay to body to avoid positioning issues
+
   private formBuilder: FormBuilder = inject(FormBuilder);
   private workOrdersService = inject(WorkOrdersService);
   private authorizedSignatureService = inject(AuthorizedSignatureService);
   private lineManagerService = inject(LineManagerService);
+  private positionService = inject(PositionService);
+  private sowPositionService = inject(StatementOfWorkPositionService);
   private messageService = inject(MessageService);
   private dialogRef = inject(DynamicDialogRef);
   private config = inject(DynamicDialogConfig);
@@ -87,6 +115,7 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
     this.initForm();
     this.loadAuthorizedSignatures();
     this.loadLineManagers();
+    this.loadPositions();
 
     if (this.config.data) {
       this.isEditMode = this.config.data.mode === 'edit';
@@ -94,6 +123,7 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       if (this.isEditMode && this.config.data.statementOfWork) {
         this.statementOfWork = this.config.data.statementOfWork;
         this.populateForm(this.statementOfWork);
+        this.loadStatementOfWorkPositions(this.statementOfWork.id!);
       }
     }
   }
@@ -111,7 +141,36 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       escalationManagerId: ['', Validators.required],
       compnovaEscalationManagerId: ['', Validators.required],
       authorizedSignatureId: ['', Validators.required],
+      positions: this.formBuilder.array([]),
     });
+  }
+
+  // Getter for positions FormArray
+  get positions(): FormArray {
+    return this.StatementOfWorkForm.get('positions') as FormArray;
+  }
+
+  // Add a new position to the FormArray
+  addPosition() {
+    const positionForm = this.formBuilder.group({
+      id: [null],
+      positionId: ['', Validators.required],
+      type: [PositionType.ONSITE, Validators.required],
+      status: [true],
+    });
+    this.positions.push(positionForm);
+  }
+
+  // Remove a position from the FormArray
+  removePosition(index: number) {
+    const position = this.positions.at(index);
+    if (position) {
+      if (position.value.id) {
+        position.patchValue({ status: false });
+      } else {
+        this.positions.removeAt(index);
+      }
+    }
   }
 
   populateForm(statementOfWork: StatementOfWork) {
@@ -123,10 +182,11 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       type: statementOfWork.type,
       projectState: statementOfWork.projectState,
       fixedBidAmount: statementOfWork.fixedBidAmount,
-      lineManagerId: statementOfWork.lineManager.id,
-      escalationManagerId: statementOfWork.csxEscalationManager.id,
-      compnovaEscalationManagerId: statementOfWork.compnovaEscalationManager.id,
-      authorizedSignatureId: statementOfWork.authorizedSignature.id,
+      lineManagerId: statementOfWork.lineManager?.id,
+      escalationManagerId: statementOfWork.csxEscalationManager?.id,
+      compnovaEscalationManagerId:
+        statementOfWork.compnovaEscalationManager?.id,
+      authorizedSignatureId: statementOfWork.authorizedSignature?.id,
     });
   }
 
@@ -134,11 +194,6 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
     this.authorizedSignatureService.getAllSignatures().subscribe(
       (authorizedSignatures: AuthorizedSignature[]) => {
         this.authorizedSignaturesOptions.set(authorizedSignatures);
-        // if (this.isEditMode && this.statementOfWork) {
-        //   this.StatementOfWorkForm.patchValue({
-        //     authorizedSignatureId: this.statementOfWork.authorizedSignatureId,
-        //   });
-        // }
       },
       (error) => {
         this.messageService.add({
@@ -153,27 +208,20 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
   loadLineManagers() {
     this.lineManagerService.getAllLineManagers().subscribe(
       (lineManagers: LineManager[]) => {
-        this.lineManagersOptions.set(lineManagers.filter(
-          (manager) => manager.type === LineManagerType.CSX_LINE_MANAGER
-        ));
-        this.csxEscalationManagersOptions.set(lineManagers.filter(
-          (manager) => manager.type === LineManagerType.CSX_ESCALATION_MANAGER
-        ));
-        this.compnovaEscalationManagersOptions.set(lineManagers.filter(
-          (manager) =>
-            manager.type === LineManagerType.COMPNOVA_ESCALATION_MANAGER
-        ));
-        // if (this.isEditMode && this.statementOfWork) {
-        //   setTimeout(() => {
-        //   this.StatementOfWorkForm.patchValue({
-        //     lineManagerId: this.statementOfWork.lineManagerId,
-        //     escalationManagerId: this.statementOfWork.csxEscalationManagerId,
-        //     compnovaEscalationManagerId:
-        //       this.statementOfWork.compnovaEscalationManagerId,
-        //   });
-        //   this.StatementOfWorkForm.updateValueAndValidity()
-        // }, 1000);
-        // }
+        // Filter line managers by type
+        const csxLineManagers = lineManagers.filter(
+          (lm) => lm.type === LineManagerType.CSX_LINE_MANAGER
+        );
+        const csxEscalationManagers = lineManagers.filter(
+          (lm) => lm.type === LineManagerType.CSX_ESCALATION_MANAGER
+        );
+        const compnovaEscalationManagers = lineManagers.filter(
+          (lm) => lm.type === LineManagerType.COMPNOVA_ESCALATION_MANAGER
+        );
+
+        this.lineManagersOptions.set(csxLineManagers);
+        this.csxEscalationManagersOptions.set(csxEscalationManagers);
+        this.compnovaEscalationManagersOptions.set(compnovaEscalationManagers);
       },
       (error) => {
         this.messageService.add({
@@ -183,6 +231,61 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
         });
       }
     );
+  }
+
+  loadPositions() {
+    this.positionService.getAllPositions().subscribe(
+      (positions: Position[]) => {
+        // Filter only active positions
+        const activePositions = positions.filter((p) => p.status !== false);
+        this.positionsOptions.set(activePositions);
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load positions.',
+        });
+      }
+    );
+  }
+
+  loadStatementOfWorkPositions(statementOfWorkId: number) {
+    this.sowPositionService
+      .getPositionsByStatementOfWorkId(statementOfWorkId)
+      .subscribe(
+        (sowPositions: StatementOfWorkPosition[]) => {
+          this.sowPositions = sowPositions;
+
+          // Clear existing positions
+          while (this.positions.length) {
+            this.positions.removeAt(0);
+          }
+
+          // Add positions to form array
+          sowPositions.forEach((sowPosition) => {
+            const positionForm = this.formBuilder.group({
+              id: [sowPosition.id],
+              positionId: [sowPosition.positionId, Validators.required],
+              type: [sowPosition.type, Validators.required],
+              status: [sowPosition.status !== false],
+            });
+            this.positions.push(positionForm);
+          });
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load statement of work positions.',
+          });
+        }
+      );
+  }
+
+  getPositionTitle(positionId: number): string {
+    const position = this.positionsOptions().find((p) => p.id === positionId);
+    return position ? position.title : 'Unknown Position';
   }
 
   onSubmit() {
@@ -202,6 +305,15 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       return `${year}-${month}-${day}`;
     };
 
+    const positionsData = this.positions.value.map((position: any) => {
+      return {
+        id: position.id || null,
+        positionId: position.positionId,
+        type: position.type,
+        status: position.status,
+      } as StatementOfWorkPosition;
+    });
+
     // Convert form data to StatementOfWork object
     const statementOfWorkData: StatementOfWork = {
       name: formData.name,
@@ -215,6 +327,7 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       csxEscalationManagerId: formData.escalationManagerId,
       compnovaEscalationManagerId: formData.compnovaEscalationManagerId,
       authorizedSignatureId: formData.authorizedSignatureId,
+      positions: formData.positions, // Positions will be handled separately
     };
 
     if (this.isEditMode && this.statementOfWork?.id) {
@@ -222,13 +335,7 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
         .updateWorkOrder(this.statementOfWork.id, statementOfWorkData)
         .subscribe({
           next: (result) => {
-            this.loading = false;
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Statement of Work updated successfully.',
-            });
-            this.dialogRef.close(result);
+            this.completeOperation();
           },
           error: (error) => {
             this.loading = false;
@@ -243,13 +350,7 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
     } else {
       this.workOrdersService.createWorkOrder(statementOfWorkData).subscribe({
         next: (result) => {
-          this.loading = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Statement of Work created successfully.',
-          });
-          this.dialogRef.close(result);
+          this.completeOperation();
         },
         error: (error) => {
           this.loading = false;
@@ -262,6 +363,18 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
         },
       });
     }
+  }
+
+  completeOperation() {
+    this.loading = false;
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: `Statement of Work ${
+        this.isEditMode ? 'updated' : 'created'
+      } successfully.`,
+    });
+    this.dialogRef.close(true);
   }
 
   onCancel() {
