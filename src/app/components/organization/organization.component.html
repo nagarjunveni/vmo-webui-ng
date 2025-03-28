@@ -1,7 +1,55 @@
 <p-organization-chart [value]="data">
   <ng-template let-node pTemplate="default">
-    <div class="flex flex-col items-center">
-      <div class="mt-4 font-medium text-lg">{{ node.data.positionName }}</div>
-    </div>
+    <p-card
+      [style]="{ width: '320px', margin: 'auto' }"
+      styleClass="position-card shadow-hover"
+    >
+      <ng-template pTemplate="header">
+        <div class="card-header">
+          <div class="header-title">
+            <div class="title-info">
+              <i class="pi pi-briefcase primary-icon"></i>
+              <h4>{{ node.data.positionName }}</h4>
+            </div>
+            <div class="location-info">
+              <i class="pi pi-map-marker location-icon"></i>
+              <span>{{ node.data.location || "Not Specified" }}</span>
+            </div>
+          </div>
+          @if(node.data.division) {
+          <small class="reports-to"> Division: {{ node.data.division }} </small>
+          }
+        </div>
+      </ng-template>
+
+      <div class="position-details">
+        @if (node.data.skillSet && node.data.skillSet.length) {
+        <div class="skills-section">
+          <div class="section-title">
+            <i class="pi pi-code skills-icon"></i> Skills
+          </div>
+          <div class="skill-tags">
+            @for(skill of node.data.skillSet.slice(0, 3); track skill) {
+            <p-badge [value]="skill" severity="info" class="skill-badge">
+            </p-badge>
+            }
+          </div>
+        </div>
+        } @if(node.data.responsibilities && node.data.responsibilities.length) {
+        <div class="responsibilities-section">
+          <div class="section-title">
+            <i class="pi pi-list responsibilities-icon"></i> Responsibilities
+          </div>
+          <ul class="responsibility-list">
+            @for(resp of node.data.responsibilities.slice(0, 3); track resp) {
+            <li>
+              {{ resp }}
+            </li>
+            }
+          </ul>
+        </div>
+        }
+      </div>
+    </p-card>
   </ng-template>
 </p-organization-chart>

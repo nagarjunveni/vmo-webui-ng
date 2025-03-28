@@ -1,4 +1,9 @@
 ::ng-deep {
+
+  :host {
+    display: block;
+    width: 100%;
+  }
   .onsite-location {
     background: lightcyan;
   }
@@ -6,4 +11,134 @@
   .offshore-location {
     background: lightgoldenrodyellow;
   }
+
+  .position-card {
+    transition: box-shadow 0.3s ease;
+
+    &.shadow-hover {
+      &:hover {
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .p-card-body {
+    padding: 10px !important;
+  }
+
+  .card-header {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+
+      .title-info {
+        display: flex;
+        align-items: center;
+
+        .primary-icon {
+          color: #007bff;
+          margin-right: 5px;
+        }
+
+        h4 {
+          margin: 0;
+          font-weight: bold;
+          color: #333;
+        }
+      }
+
+      .location-info {
+        display: flex;
+        align-items: center;
+        color: #28a745;
+        font-size: 12px;
+
+        .location-icon {
+          margin-right: 5px;
+          font-size: 12px;
+          color: #28a745;
+        }
+      }
+    }
+
+    .reports-to {
+      display: flex;
+      align-items: center;
+      color: #6c757d;
+
+      .secondary-icon {
+        margin-right: 4px;
+        color: #6c757d;
+      }
+    }
+  }
+
+  .position-details {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+
+    .skills-section, .responsibilities-section {
+
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        padding-bottom: 2px;
+        border-bottom: 2px solid #f0f0f0;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+
+        i {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .skills-section {
+      .skills-icon {
+        color: #6f42c1;
+      }
+
+      .skill-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .skill-badge {
+          margin-bottom: 2px;
+        }
+      }
+    }
+
+    .responsibilities-section {
+      h5 {
+        margin: 0;
+      }
+      .responsibilities-icon {
+        color: #fd7e14;
+      }
+
+      .responsibility-list {
+        padding-left: 10px;
+        margin: 0;
+
+        li {
+          margin-bottom: 4px;
+          // line-height: 1.4;
+          color: #495057;
+          text-align: left;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
 }
