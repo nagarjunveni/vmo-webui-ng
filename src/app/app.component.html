@@ -1,4 +1,5 @@
 <div class="app-container">
+  @if (!isOrganizationURL) {
   <header class="app-header">
     <div class="logo">Work Order Management</div>
     <nav class="main-nav">
@@ -12,12 +13,15 @@
       >
     </nav>
   </header>
+  }
 
   <main class="app-content">
     <router-outlet></router-outlet>
   </main>
 
+  @if (!isOrganizationURL ) {
   <footer class="app-footer">
     <p>&copy; 2024 VMO WebUI Angular Application</p>
   </footer>
+  }
 </div>

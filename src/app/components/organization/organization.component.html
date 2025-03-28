@@ -1,0 +1,7 @@
+<p-organization-chart [value]="data">
+  <ng-template let-node pTemplate="default">
+    <div class="flex flex-col items-center">
+      <div class="mt-4 font-medium text-lg">{{ node.data.positionName }}</div>
+    </div>
+  </ng-template>
+</p-organization-chart>
