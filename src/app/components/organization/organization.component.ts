@@ -649,6 +649,237 @@ export class OrganizationComponent {
         'Ensure system reliability and availability'
       ]
     },
+    {
+      positionId: 'Java Lead - 1 - Onsite - Engineering',
+      positionName: 'Java Lead - Onsite',
+      reportsTo: 'Chief Architect - 2',
+      skillSet: [
+        'Java Development',
+        'Microservices Architecture',
+        'Spring Framework',
+        'Hibernate',
+        'Agile Methodologies',
+        'Team Leadership',
+        'Performance Optimization',
+        'Continuous Integration/Continuous Deployment (CI/CD)',
+        'Kafka'
+      ],
+      division: 'Engineering',
+      location: 'Onsite',
+      role: 'Java Development Team Lead',
+      responsibilities: [
+        'Lead and manage Java development team',
+        'Design and implement complex Java-based solutions',
+        'Mentor junior developers and provide technical guidance',
+        'Ensure code quality and best practices',
+        'Collaborate on architectural design and system integration',
+        'Manage project deliverables and timelines'
+      ]
+    },
+    {
+      positionId: 'Java Support Engineer - Onsite - Engineering',
+      positionName: 'Java Support Engineer',
+      reportsTo: 'Java Lead - 1 - Onsite - Engineering',
+      skillSet: [
+        'Java Programming',
+        'Troubleshooting',
+        'Application Support',
+        'Bug Fixing',
+        'Spring Boot',
+        'Database Management',
+        'Debugging Techniques',
+        'Kafka'
+      ],
+      division: 'Engineering',
+      location: 'Onsite',
+      role: 'Java Application Support Specialist',
+      responsibilities: [
+        'Provide technical support for Java-based applications',
+        'Diagnose and resolve application issues',
+        'Perform system maintenance and updates',
+        'Implement bug fixes and patches',
+        'Collaborate with development team on application improvements',
+        'Maintain system documentation and support logs'
+      ]
+    },
+    {
+      positionId: 'Java Lead - Offshore - Engineering',
+      positionName: 'Java Lead - 1 - Engineering',
+      reportsTo: 'Chief Architect - 2',
+      skillSet: [
+        'Java Development',
+        'Microservices Architecture',
+        'Spring Framework',
+        'Offshore Development Management',
+        'Agile Methodologies',
+        'Team Leadership',
+        'Performance Optimization',
+        'Continuous Integration/Continuous Deployment (CI/CD)',
+        'Kafka'
+      ],
+      division: 'Engineering',
+      location: 'Offshore',
+      role: 'Offshore Java Development Team Lead',
+      responsibilities: [
+        'Manage offshore Java development team',
+        'Coordinate cross-location development efforts',
+        'Implement best practices for remote team collaboration',
+        'Oversee project delivery and quality',
+        'Provide technical leadership and mentorship',
+        'Ensure alignment with global development standards'
+      ]
+    },
+    {
+      positionId: 'Java Support Engineer - 1 - Offshore - Engineering',
+      positionName: 'Java Support Engineer - Engineering',
+      reportsTo: 'Java Lead - Offshore',
+      skillSet: [
+        'Java Programming',
+        'Troubleshooting',
+        'Application Support',
+        'Bug Fixing',
+        'Spring Boot',
+        'Database Management',
+        'Debugging Techniques',
+        'Kafka'
+      ],
+      division: 'Engineering',
+      location: 'Offshore',
+      role: 'Offshore Java Application Support Specialist',
+      responsibilities: [
+        'Provide remote technical support for Java-based applications',
+        'Diagnose and resolve application issues',
+        'Perform system maintenance and updates',
+        'Implement bug fixes and patches',
+        'Collaborate with global development team',
+        'Maintain detailed support documentation'
+      ]
+    },
+    {
+      positionId: 'Java Support Engineer - 2 - Offshore - Engineering',
+      positionName: 'Java Support Engineer',
+      reportsTo: 'Java Lead - Offshore - Engineering',
+      skillSet: [
+        'Java Programming',
+        'Troubleshooting',
+        'Application Support',
+        'Bug Fixing',
+        'Spring Boot',
+        'Database Management',
+        'Debugging Techniques',
+        'Kafka'
+      ],
+      division: 'Engineering',
+      location: 'Offshore',
+      role: 'Java Application Support Technician',
+      responsibilities: [
+        'Support Java application infrastructure',
+        'Assist in troubleshooting complex technical issues',
+        'Participate in application maintenance and improvement',
+        'Contribute to knowledge base and support documentation',
+        'Collaborate with onsite and offshore development teams'
+      ]
+    },
+    {
+      positionId: 'Java Support Engineer - 3 - Offshore - Engineering',
+      positionName: 'Java Support Engineer',
+      reportsTo: 'Java Lead - Offshore - Engineering',
+      skillSet: [
+        'Java Programming',
+        'Troubleshooting',
+        'Application Support',
+        'Bug Fixing',
+        'Spring Boot',
+        'Database Management',
+        'Debugging Techniques',
+        'Kafka'
+      ],
+      division: 'Engineering',
+      location: 'Offshore',
+      role: 'Java Support Engineer',
+      responsibilities: [
+        'Provide technical support for Java applications',
+        'Conduct detailed system diagnostics',
+        'Implement software patches and updates',
+        'Assist in performance optimization',
+        'Maintain system reliability and efficiency'
+      ]
+    },
+    {
+      positionId: 'Java Support Engineer - 4 - Offshore - Engineering',
+      positionName: 'Java Support Engineer',
+      reportsTo: 'Java Lead - Offshore - Engineering',
+      skillSet: [
+        'Java Programming',
+        'Troubleshooting',
+        'Application Support',
+        'Bug Fixing',
+        'Spring Boot',
+        'Database Management',
+        'Debugging Techniques',
+        'Kafka'
+      ],
+      division: 'Engineering',
+      location: 'Offshore',
+      role: 'Java Support Engineer',
+      responsibilities: [
+        'Support mission-critical Java applications',
+        'Perform root cause analysis of technical issues',
+        'Develop and implement solution strategies',
+        'Ensure continuous application performance',
+        'Collaborate with development teams'
+      ]
+    },
+    {
+      positionId: 'Java Support Engineer - 5 - Offshore - Engineering',
+      positionName: 'Java Support Engineer',
+      reportsTo: 'Java Lead - Offshore - Engineering',
+      skillSet: [
+        'Java Programming',
+        'Troubleshooting',
+        'Application Support',
+        'Bug Fixing',
+        'Spring Boot',
+        'Database Management',
+        'Debugging Techniques',
+        'Kafka'
+      ],
+      division: 'Engineering',
+      location: 'Offshore',
+      role: 'Java Support Engineer',
+      responsibilities: [
+        'Provide comprehensive Java application support',
+        'Monitor system performance and health',
+        'Implement proactive maintenance procedures',
+        'Assist in technical problem resolution',
+        'Support continuous improvement initiatives'
+      ]
+    },
+    {
+      positionId: 'Java Support Engineer - 6 - Offshore - Engineering',
+      positionName: 'Java Support Engineer',
+      reportsTo: 'Java Lead - Offshore - Engineering',
+      skillSet: [
+        'Java Programming',
+        'Troubleshooting',
+        'Application Support',
+        'Bug Fixing',
+        'Spring Boot',
+        'Database Management',
+        'Debugging Techniques',
+        'Kafka'
+      ],
+      division: 'Engineering',
+      location: 'Offshore',
+      role: 'Java Support Engineer',
+      responsibilities: [
+        'Manage Java application support lifecycle',
+        'Conduct comprehensive system assessments',
+        'Develop and implement technical solutions',
+        'Provide expert-level troubleshooting',
+        'Support system integration and optimization'
+      ]
+    },
   ]
 
   data: TreeNode[] = [

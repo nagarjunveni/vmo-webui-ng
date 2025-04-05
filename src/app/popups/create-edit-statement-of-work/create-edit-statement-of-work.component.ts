@@ -37,7 +37,8 @@ import {
   StatementOfWorkPosition,
   PositionType,
 } from '../../models/statement-of-work-position.model';
-import { StatementOfWorkPositionService } from '../../services/statement-of-work-position.service';
+import { ActivitiesAndDeliverables } from '../../models/activities-and-deliverables.model';
+import { Milepost } from '../../models/milepost.model';
 
 interface DropdownOption {
   label: string;
@@ -85,8 +86,7 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
   ];
 
   projectStateOptions: DropdownOption[] = [
-    { label: 'Draft', value: 'DRAFT' },
-    { label: 'Pending Approval', value: 'PENDING_APPROVAL' },
+    { label: 'New', value: 'NEW' },
     { label: 'Approved', value: 'APPROVED' },
     { label: 'Rejected', value: 'REJECTED' },
     { label: 'Completed', value: 'COMPLETED' },
@@ -106,7 +106,6 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
   private authorizedSignatureService = inject(AuthorizedSignatureService);
   private lineManagerService = inject(LineManagerService);
   private positionService = inject(PositionService);
-  private sowPositionService = inject(StatementOfWorkPositionService);
   private messageService = inject(MessageService);
   private dialogRef = inject(DynamicDialogRef);
   private config = inject(DynamicDialogConfig);
@@ -118,15 +117,16 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
     this.loadPositions();
 
     if (this.config.data) {
+      debugger
       this.isEditMode = this.config.data.mode === 'edit';
 
       if (this.isEditMode && this.config.data.statementOfWork) {
-        this.statementOfWork = this.config.data.statementOfWork;
-        this.populateForm(this.statementOfWork);
-        this.loadStatementOfWorkPositions(this.statementOfWork.id!);
-        this.workOrdersService.getWorkOrderById(this.statementOfWork.id!).subscribe(data => {
-          console.log(data);
-        });
+        this.workOrdersService
+          .getWorkOrderById(this.config.data.statementOfWork.id!)
+          .subscribe((data) => {
+            this.statementOfWork = data;
+            this.populateForm(this.statementOfWork);
+          });
       }
     }
   }
@@ -144,7 +144,12 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       escalationManagerId: ['', Validators.required],
       compnovaEscalationManagerId: ['', Validators.required],
       authorizedSignatureId: ['', Validators.required],
+      projectScope: ['', Validators.required],
+      teamsAndConditions: ['', Validators.required],
+      assumptionsAndDependencies: ['', Validators.required],
       positions: this.formBuilder.array([]),
+      mileposts: this.formBuilder.array([]),
+      activities: this.formBuilder.array([]),
     });
   }
 
@@ -153,18 +158,24 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
     return this.StatementOfWorkForm.get('positions') as FormArray;
   }
 
-  // Add a new position to the FormArray
-  addPosition() {
+  get mileposts(): FormArray {
+    return this.StatementOfWorkForm.get('mileposts') as FormArray;
+  }
+
+  get activities(): FormArray {
+    return this.StatementOfWorkForm.get('activities') as FormArray;
+  }
+
+  addPosition(position: StatementOfWorkPosition | null = null) {
     const positionForm = this.formBuilder.group({
-      id: [null],
-      positionId: ['', Validators.required],
-      type: [PositionType.ONSITE, Validators.required],
+      id: [position ? position.id : null],
+      positionId: [position ? position.positionId : '', Validators.required],
+      type: [position ? position.type : '', Validators.required],
       status: [true],
     });
     this.positions.push(positionForm);
   }
 
-  // Remove a position from the FormArray
   removePosition(index: number) {
     const position = this.positions.at(index);
     if (position) {
@@ -176,6 +187,53 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
     }
   }
 
+  addMilepost(milepost: Milepost | null = null) {
+    const milepostForm = this.formBuilder.group({
+      id: [milepost ? milepost.id : null],
+      name: [milepost ? milepost.name : '', Validators.required],
+      description: [milepost ? milepost.description : '', Validators.required],
+      dueDate: [milepost ? milepost.dueDate : '', Validators.required],
+      amount: [milepost ? milepost.amount : 0, [Validators.required, Validators.min(0)]],
+      status: [true],
+    });
+    this.mileposts.push(milepostForm);
+  }
+
+  removeMilepost(index: number) {
+    const milepost = this.mileposts.at(index);
+    if (milepost) {
+      if (milepost.value.id) {
+        milepost.patchValue({ status: false });
+      } else {
+        this.mileposts.removeAt(index);
+      }
+    }
+  }
+
+  addActivity(activity: ActivitiesAndDeliverables | null = null) {
+    const activityForm = this.formBuilder.group({
+      id: [activity ? activity.id : null],
+      name: [activity ? activity.name : '', Validators.required],
+      phase: [activity ? activity.phase : '', Validators.required],
+      deliverable: [activity ? activity.deliverable : '', Validators.required],
+      startDate: [activity ? activity.startDate : '', Validators.required],
+      endDate: [activity ? activity.endDate : '', Validators.required],
+      status: [true],
+    });
+    this.activities.push(activityForm);
+  }
+
+  removeActivity(index: number) {
+    const activity = this.activities.at(index);
+    if (activity) {
+      if (activity.value.id) {
+        activity.patchValue({ status: false });
+      } else {
+        this.activities.removeAt(index);
+      }
+    }
+  }
+
   populateForm(statementOfWork: StatementOfWork) {
     this.StatementOfWorkForm.patchValue({
       name: statementOfWork.name,
@@ -183,6 +241,9 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       startDate: new Date(statementOfWork.startDate),
       endDate: new Date(statementOfWork.endDate),
       type: statementOfWork.type,
+      projectScope: statementOfWork.projectScope,
+      teamsAndConditions: statementOfWork.teamsAndConditions,
+      assumptionsAndDependencies: statementOfWork.assumptionsAndDependencies,
       projectState: statementOfWork.projectState,
       fixedBidAmount: statementOfWork.fixedBidAmount,
       lineManagerId: statementOfWork.lineManager?.id,
@@ -190,7 +251,27 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       compnovaEscalationManagerId:
         statementOfWork.compnovaEscalationManager?.id,
       authorizedSignatureId: statementOfWork.authorizedSignature?.id,
+      positions: [],
+      mileposts: [],
+      activities: [],
     });
+
+    // Populate Positions
+    this.positions.clear();
+    statementOfWork.positions?.forEach((sowPosition) => {
+      this.addPosition(sowPosition);
+    })
+
+    this.mileposts.clear();
+    statementOfWork.mileposts?.forEach((milepost) => {
+      this.addMilepost(milepost);
+    })
+
+    this.activities.clear();
+    statementOfWork.activities?.forEach((activity) => {
+      this.addActivity(activity);
+    })
+
   }
 
   loadAuthorizedSignatures() {
@@ -253,39 +334,6 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
     );
   }
 
-  loadStatementOfWorkPositions(statementOfWorkId: number) {
-    this.sowPositionService
-      .getPositionsByStatementOfWorkId(statementOfWorkId)
-      .subscribe(
-        (sowPositions: StatementOfWorkPosition[]) => {
-          this.sowPositions = sowPositions;
-
-          // Clear existing positions
-          while (this.positions.length) {
-            this.positions.removeAt(0);
-          }
-
-          // Add positions to form array
-          sowPositions.forEach((sowPosition) => {
-            const positionForm = this.formBuilder.group({
-              id: [sowPosition.id],
-              positionId: [sowPosition.positionId, Validators.required],
-              type: [sowPosition.type, Validators.required],
-              status: [sowPosition.status !== false],
-            });
-            this.positions.push(positionForm);
-          });
-        },
-        (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to load statement of work positions.',
-          });
-        }
-      );
-  }
-
   getPositionTitle(positionId: number): string {
     const position = this.positionsOptions().find((p) => p.id === positionId);
     return position ? position.title : 'Unknown Position';
@@ -325,12 +373,25 @@ export class CreateEditStatementOfWorkComponent implements OnInit {
       endDate: formatDate(formData.endDate),
       type: formData.type,
       projectState: formData.projectState,
+      projectScope: formData.projectScope,
+      assumptionsAndDependencies: formData.assumptionsAndDependencies,
+      teamsAndConditions: formData.teamsAndConditions,
       fixedBidAmount: formData.fixedBidAmount,
       lineManagerId: formData.lineManagerId,
       csxEscalationManagerId: formData.escalationManagerId,
       compnovaEscalationManagerId: formData.compnovaEscalationManagerId,
       authorizedSignatureId: formData.authorizedSignatureId,
       positions: formData.positions, // Positions will be handled separately
+      mileposts: formData.mileposts.map((milepost) => {
+        return { ...milepost, dueDate: formatDate(new Date(milepost.dueDate)) };
+      }),
+      activities: formData.activities.map((activity) => {
+        return {
+          ...activity,
+          startDate: formatDate(new Date(activity.startDate)),
+          endDate: formatDate(new Date(activity.endDate)),
+        };
+      }),
     };
 
     if (this.isEditMode && this.statementOfWork?.id) {

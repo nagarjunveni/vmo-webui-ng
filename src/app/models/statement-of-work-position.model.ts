@@ -8,9 +8,9 @@ export enum PositionType {
 export interface StatementOfWorkPosition {
   id?: number;
   statementOfWorkId?: number;
-  positionId: number;
+  positionId?: number;
   position?: Position;
-  type: PositionType;
+  type?: PositionType;
   status?: boolean;
   createdDate?: Date;
   updatedDate?: Date;

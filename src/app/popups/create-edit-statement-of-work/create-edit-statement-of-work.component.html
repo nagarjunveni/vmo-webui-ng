@@ -297,7 +297,38 @@
       ></textarea>
     </div>
 
-    <!-- Positions Section -->
+    <div class="field">
+      <label for="projectScope">Project Scope</label>
+      <textarea
+        id="projectScope"
+        pTextarea
+        formControlName="projectScope"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="field">
+      <label for="teamsAndConditions">Teams And Conditions</label>
+      <textarea
+        id="teamsAndConditions"
+        pTextarea
+        formControlName="teamsAndConditions"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="field">
+      <label for="assumptionsAndDependencies"
+        >Assumptions And Dependencies</label
+      >
+      <textarea
+        id="assumptionsAndDependencies"
+        pTextarea
+        formControlName="assumptionsAndDependencies"
+        rows="3"
+      ></textarea>
+    </div>
+
     <div class="positions-section">
       <div class="section-header">
         <h3>Positions</h3>
@@ -376,6 +407,319 @@
       <div class="no-positions" *ngIf="positions.length === 0">
         <p>
           No positions added. Click "Add Position" to add a position to this
+          Statement of Work.
+        </p>
+      </div>
+    </div>
+
+    <div class="positions-section">
+      <div class="section-header">
+        <h3>Activities and Deliverables Timeline</h3>
+        <p-button
+          label="Add Activity"
+          icon="pi pi-plus"
+          styleClass="p-button-sm p-button-success"
+          (click)="addActivity()"
+        ></p-button>
+      </div>
+
+      <div class="positions-table" *ngIf="activities.length > 0">
+        <p-table
+          [value]="activities.controls"
+          styleClass="p-datatable-sm"
+          responsiveLayout="scroll"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Phase</th>
+              <th>Activity</th>
+              <th>Deliverable</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-activity let-i="rowIndex">
+            <tr [formGroup]="activity">
+              <td>
+                <input
+                  id="phase"
+                  type="text"
+                  pInputText
+                  formControlName="phase"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      activity.get('phase')?.invalid &&
+                      activity.get('phase')?.touched
+                  }"
+                />
+                <small
+                  *ngIf="
+                    activity.get('phase')?.invalid &&
+                    activity.get('phase')?.touched
+                  "
+                  class="p-error"
+                >
+                  Phase is required
+                </small>
+              </td>
+              <td>
+                <input
+                  id="name"
+                  type="text"
+                  pInputText
+                  formControlName="name"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      activity.get('name')?.invalid &&
+                      activity.get('name')?.touched
+                  }"
+                />
+                <small
+                  *ngIf="
+                    activity.get('name')?.invalid &&
+                    activity.get('name')?.touched
+                  "
+                  class="p-error"
+                >
+                  Activity Name is required
+                </small>
+              </td>
+              <td>
+                <textarea
+                  id="deliverable"
+                  pTextarea
+                  formControlName="deliverable"
+                  rows="3"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      activity.get('deliverable')?.invalid &&
+                      activity.get('deliverable')?.touched
+                  }"
+                ></textarea>
+                <small
+                  *ngIf="
+                    activity.get('deliverable')?.invalid &&
+                    activity.get('deliverable')?.touched
+                  "
+                  class="p-error"
+                >
+                  Deliverable is required
+                </small>
+              </td>
+              <td>
+                <p-datepicker
+                  id="startDate"
+                  formControlName="startDate"
+                  [showIcon]="true"
+                  dateFormat="yy-mm-dd"
+                  [appendTo]="overlayAppendTo"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      activity.get('startDate')?.invalid &&
+                      activity.get('startDate')?.touched
+                  }"
+                ></p-datepicker>
+                <small
+                  *ngIf="
+                    activity.get('startDate')?.invalid &&
+                    activity.get('startDate')?.touched
+                  "
+                  class="p-error"
+                >
+                  Start Date is required
+                </small>
+              </td>
+              <td>
+                <!-- End Date -->
+
+                <p-datepicker
+                  id="endDate"
+                  formControlName="endDate"
+                  [showIcon]="true"
+                  dateFormat="yy-mm-dd"
+                  [appendTo]="overlayAppendTo"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      activity.get('endDate')?.invalid &&
+                      activity.get('endDate')?.touched
+                  }"
+                ></p-datepicker>
+                <small
+                  *ngIf="
+                    activity.get('endDate')?.invalid &&
+                    activity.get('endDate')?.touched
+                  "
+                  class="p-error"
+                >
+                  End Date is required
+                </small>
+              </td>
+              <td class="text-center">
+                <p-button
+                  icon="pi pi-trash"
+                  styleClass="p-button-rounded p-button-danger p-button-text"
+                  (click)="removeActivity(i)"
+                ></p-button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4" class="text-center">No positions added</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      <div class="no-positions" *ngIf="activities.length === 0">
+        <p>
+          No activities added. Click "Add Activity" to add a activity to this
+          Statement of Work.
+        </p>
+      </div>
+    </div>
+
+    <!-- Positions Section -->
+    <div class="positions-section">
+      <div class="section-header">
+        <h3>Mileposts</h3>
+        <p-button
+          label="Add Milepost"
+          icon="pi pi-plus"
+          styleClass="p-button-sm p-button-success"
+          (click)="addMilepost()"
+        ></p-button>
+      </div>
+
+      <div class="positions-table" *ngIf="mileposts.length > 0">
+        <p-table
+          [value]="mileposts.controls"
+          styleClass="p-datatable-sm"
+          responsiveLayout="scroll"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Due Date</th>
+              <th>Amount</th>
+              <th style="width: 10%">Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-milepost let-i="rowIndex">
+            <tr [formGroup]="milepost">
+              <td>
+                <input
+                  id="name"
+                  type="text"
+                  pInputText
+                  formControlName="name"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      milepost.get('name')?.invalid &&
+                      milepost.get('name')?.touched
+                  }"
+                />
+                <small
+                  *ngIf="
+                    milepost.get('name')?.invalid &&
+                    milepost.get('name')?.touched
+                  "
+                  class="p-error"
+                >
+                  Milepost Name is required
+                </small>
+              </td>
+              <td>
+                <textarea
+                  id="description"
+                  pTextarea
+                  formControlName="description"
+                  rows="3"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      milepost.get('description')?.invalid &&
+                      milepost.get('description')?.touched
+                  }"
+                ></textarea>
+                <small
+                  *ngIf="
+                    milepost.get('description')?.invalid &&
+                    milepost.get('description')?.touched
+                  "
+                  class="p-error"
+                >
+                  Description is required
+                </small>
+              </td>
+              <td>
+                <p-datepicker
+                  id="dueDate"
+                  formControlName="dueDate"
+                  [showIcon]="true"
+                  dateFormat="yy-mm-dd"
+                  [appendTo]="overlayAppendTo"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      milepost.get('dueDate')?.invalid &&
+                      milepost.get('dueDate')?.touched
+                  }"
+                ></p-datepicker>
+                <small
+                  *ngIf="
+                    milepost.get('dueDate')?.invalid &&
+                    milepost.get('dueDate')?.touched
+                  "
+                  class="p-error"
+                >
+                  Due Date is required
+                </small>
+              </td>
+              <td>
+                <p-inputNumber
+                  id="amount"
+                  formControlName="amount"
+                  mode="currency"
+                  currency="USD"
+                  locale="en-US"
+                  [minFractionDigits]="2"
+                  [ngClass]="{
+                    'ng-invalid ng-dirty':
+                      milepost.get('amount')?.invalid &&
+                      milepost.get('amount')?.touched
+                  }"
+                ></p-inputNumber>
+                <small
+                  *ngIf="
+                    milepost.get('amount')?.invalid &&
+                    milepost.get('amount')?.touched
+                  "
+                  class="p-error"
+                >
+                  Amount is required
+                </small>
+              </td>
+              <td class="text-center">
+                <p-button
+                  icon="pi pi-trash"
+                  styleClass="p-button-rounded p-button-danger p-button-text"
+                  (click)="removeMilepost(i)"
+                ></p-button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4" class="text-center">No Milepost added</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      <div class="no-positions" *ngIf="mileposts.length === 0">
+        <p>
+          No mileposts added. Click "Add milepost" to add a milepost to this
           Statement of Work.
         </p>
       </div>
